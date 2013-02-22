@@ -18,9 +18,6 @@ import refine.utils.PrintOutput;
 
 public class CalculateMediaApproach {
 
-	private int tolerance = 0;
-	private final int ACCEPTABLECANDIDATESNUMBER = 3;
-
 	private class ClassAtributes { // classe interna usada somente dentro da
 									// classe
 		int classID;
@@ -61,6 +58,7 @@ public class CalculateMediaApproach {
 	private String indicationAdress;
 
 	private boolean needCalculateAll;
+	private int numberMoveSuggestions = 0;
 
 	public CalculateMediaApproach(
 			Map<Pair<Method, Method>, Parameters> allParameters,
@@ -90,7 +88,6 @@ public class CalculateMediaApproach {
 		indicationAdress = activeProjectName + " " + strategy + " indication";
 
 		int contador[] = { 0, 0, 0, 0, 0 };
-		int numberSuggestions = 0;
 
 		pOutput.write("\n " + strategy + "\nMetodos com menos que "
 				+ allMethods.getNumberOfExcluded()
@@ -166,21 +163,20 @@ public class CalculateMediaApproach {
 			ClassAtributes classOriginal = new ClassAtributes(
 					sourceMethod.getSourceClassID());
 
-			blindAnalisysBinary(allClassSimilarity, classOriginal, contador);
-			// blindAnalisys(allClassSimilarity.indexOf(classOriginal),
-			// contador);
+			normalize(allClassSimilarity);
 
 			writeTraceIndications(sourceMethod, allClassSimilarity);
 
-			if (checkPossibleSugestion(sourceMethod, allClassSimilarity)) {
-				numberSuggestions++;
-			}
+			blindAnalisysBinary(allClassSimilarity, sourceMethod, contador);
+			// blindAnalisys(allClassSimilarity.indexOf(classOriginal),
+			// contador);
+
 		}
 
 		writeStatisticsBlind(contador);
 		writeExcelFormat(contador, strategy);
 
-		pOutput.write(" Numero de sugestoes " + numberSuggestions + " \n",
+		pOutput.write(" Numero de sugestoes " + numberMoveSuggestions + " \n",
 				sugestionAdress);
 
 		if (!needCalculateAll) {
@@ -194,40 +190,31 @@ public class CalculateMediaApproach {
 
 	}
 
-	private void writeTraceIndications(Method sourceMethod,
-			List<ClassAtributes> allClassSimilarity) {
+	private void normalize(List<ClassAtributes> allClassSimilarity) {
 		// TODO Auto-generated method stub
-		String method = AllEntitiesMapping.getInstance().getByID(
-				sourceMethod.getNameID());
 
-		String classe = AllEntitiesMapping.getInstance().getByID(
-				sourceMethod.getSourceClassID());
+		double bigger = allClassSimilarity.get(0).similarityIndice;
+		double minor = allClassSimilarity.get(0).similarityIndice;
 
-		ClassAtributes classOriginal = new ClassAtributes(
-				sourceMethod.getSourceClassID());
-
-		pOutput.write("Similaridade para método " + method + "\n",
-				indicationAdress);
-
-		pOutput.write("Ranking classe original " + classe + " "
-				+ (allClassSimilarity.indexOf(classOriginal) + 1) + "º \n",
-				indicationAdress);
-
-		for (ClassAtributes classAtributes : allClassSimilarity) {
-			pOutput.write(
-					AllEntitiesMapping.getInstance().getByID(
-							classAtributes.classID)
-							+ " ", indicationAdress);
-
-			pOutput.write(classAtributes.similarityIndice + "\n",
-					indicationAdress);
+		for (int i = 0; i < allClassSimilarity.size(); i++) {
+			if (allClassSimilarity.get(i).similarityIndice > bigger) {
+				bigger = allClassSimilarity.get(i).similarityIndice;
+			} else if (allClassSimilarity.get(i).similarityIndice < minor) {
+				minor = allClassSimilarity.get(i).similarityIndice;
+			}
 		}
-		pOutput.write("\n", indicationAdress);
+
+		bigger -= minor;
+
+		for (int i = 0; i < allClassSimilarity.size(); i++) {
+			allClassSimilarity.get(i).similarityIndice -= minor;
+			allClassSimilarity.get(i).similarityIndice /= bigger;
+		}
 
 	}
 
 	private boolean checkPossibleSugestion(Method sourceMethod,
-			List<ClassAtributes> allClassSimilarity) {
+			List<ClassAtributes> allClassSimilarity, int posMax) {
 		// TODO Auto-generated method stub
 
 		ClassAtributes classOriginal = new ClassAtributes(
@@ -235,15 +222,10 @@ public class CalculateMediaApproach {
 
 		int MyPosition = allClassSimilarity.indexOf(classOriginal);
 
-		// Para não mover para a propria classe
-		if (tolerance < ACCEPTABLECANDIDATESNUMBER) {
-			tolerance = ACCEPTABLECANDIDATESNUMBER;
-		}
+		if (MyPosition >= posMax) {
+			int[] CandidateClassID = new int[posMax];
 
-		if (MyPosition >= tolerance) {
-			int[] CandidateClassID = new int[ACCEPTABLECANDIDATESNUMBER];
-
-			for (int i = 0; i < ACCEPTABLECANDIDATESNUMBER; i++) {
+			for (int i = 0; i < posMax; i++) {
 				CandidateClassID[i] = allClassSimilarity.get(i).classID;
 			}
 
@@ -350,8 +332,11 @@ public class CalculateMediaApproach {
 	}
 
 	private void blindAnalisysBinary(List<ClassAtributes> allClassSimilarity,
-			ClassAtributes classOriginal, int[] contador) {
+			Method sourceMethod, int[] contador) {
 		// TODO Auto-generated method stub
+
+		ClassAtributes classOriginal = new ClassAtributes(
+				sourceMethod.getSourceClassID());
 
 		final int POSICAOMAXIMA = 3;
 		final int POSICAOCORRETA = 0;
@@ -368,6 +353,7 @@ public class CalculateMediaApproach {
 			System.out.println("Nao aplicavel");
 			return;
 		}
+
 		while (((first - next) / first) < PORCENTAGEM || index <= POSICAOMAXIMA) {
 
 			ClassAtributes classAtributesFirst = allClassSimilarity.get(index);
@@ -406,44 +392,41 @@ public class CalculateMediaApproach {
 			contador[POSICAOMAXIMA]++;
 		}
 		// System.out.println();
+		if (checkPossibleSugestion(sourceMethod, allClassSimilarity,index)) {
+			numberMoveSuggestions++;
+		}
 
 	}
 
-	private void blindAnalisysBinaryStrategy2(
-			List<ClassAtributes> allClassSimilarity,
-			ClassAtributes classOriginal, int[] contador) {
+	private void writeTraceIndications(Method sourceMethod,
+			List<ClassAtributes> allClassSimilarity) {
 		// TODO Auto-generated method stub
+		String method = AllEntitiesMapping.getInstance().getByID(
+				sourceMethod.getNameID());
 
-		final int POSICAOMAXIMA = 3;
-		final int POSICAOCORRETA = 0;
+		String classe = AllEntitiesMapping.getInstance().getByID(
+				sourceMethod.getSourceClassID());
 
-		final int MINIMO = 0;
-		final int MEDIO = 2;
-		int maximo = 2;
-		int index = MEDIO + 1;
+		ClassAtributes classOriginal = new ClassAtributes(
+				sourceMethod.getSourceClassID());
 
-		int classOriginalIndex = allClassSimilarity.indexOf(classOriginal);
+		pOutput.write("Similaridade para método " + method + "\n",
+				indicationAdress);
 
-		ClassAtributes classAtributesFirst = allClassSimilarity.get(MINIMO);
-		ClassAtributes classAtributesSecond = allClassSimilarity.get(MEDIO);
-		double diff = Math.abs(classAtributesFirst.similarityIndice)
-				- Math.abs(classAtributesSecond.similarityIndice);
+		pOutput.write("Ranking classe original " + classe + " "
+				+ (allClassSimilarity.indexOf(classOriginal) + 1) + "º \n",
+				indicationAdress);
 
-		System.out.println("A diferença é " + diff);
+		for (ClassAtributes classAtributes : allClassSimilarity) {
+			pOutput.write(
+					AllEntitiesMapping.getInstance().getByID(
+							classAtributes.classID)
+							+ " ", indicationAdress);
 
-		double nextIndice = allClassSimilarity.get(index).similarityIndice;
-		while (Math.abs(nextIndice) + diff > classAtributesSecond.similarityIndice) {
-			maximo++;
-			nextIndice = allClassSimilarity.get(index).similarityIndice;
+			pOutput.write(classAtributes.similarityIndice + "\n",
+					indicationAdress);
 		}
-
-		System.out.println("A classOriginalIndex é " + classOriginalIndex);
-		System.out.println("A posição maximo é " + maximo);
-		System.out.println();
-		if (classOriginalIndex > maximo)
-			contador[POSICAOMAXIMA]++;
-		else
-			contador[POSICAOCORRETA]++;
+		pOutput.write("\n", indicationAdress);
 
 	}
 

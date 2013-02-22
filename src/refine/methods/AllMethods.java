@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
 import refine.ast.DeepDependencyVisitor;
