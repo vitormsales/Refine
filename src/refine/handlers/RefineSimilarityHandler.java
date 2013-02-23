@@ -99,8 +99,8 @@ public class RefineSimilarityHandler extends AbstractHandler {
 				// tornando visivel para o coletor de lixo
 				allDeepDependency = null;
 
-			//	allMethods.excludeConstructors();
-			//	allMethods.excludeDependeciesLessThan(5);
+				allMethods.excludeConstructors();
+				allMethods.excludeDependeciesLessThan(5);
 
 				// ########## Method2Method begin
 

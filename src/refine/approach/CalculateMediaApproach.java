@@ -160,16 +160,12 @@ public class CalculateMediaApproach {
 				}
 			});
 
-			ClassAtributes classOriginal = new ClassAtributes(
-					sourceMethod.getSourceClassID());
-
 			normalize(allClassSimilarity);
 
 			writeTraceIndications(sourceMethod, allClassSimilarity);
 
-			blindAnalisysBinary(allClassSimilarity, sourceMethod, contador);
-			// blindAnalisys(allClassSimilarity.indexOf(classOriginal),
-			// contador);
+			// blindAnalisysBinary(allClassSimilarity, sourceMethod, contador);
+			blindAnalisys(allClassSimilarity, sourceMethod, contador);
 
 		}
 
@@ -392,7 +388,7 @@ public class CalculateMediaApproach {
 			contador[POSICAOMAXIMA]++;
 		}
 		// System.out.println();
-		if (checkPossibleSugestion(sourceMethod, allClassSimilarity,index)) {
+		if (checkPossibleSugestion(sourceMethod, allClassSimilarity, index)) {
 			numberMoveSuggestions++;
 		}
 
@@ -430,8 +426,15 @@ public class CalculateMediaApproach {
 
 	}
 
-	private void blindAnalisys(int indexOf, int[] contador) {
+	private void blindAnalisys(List<ClassAtributes> allClassSimilarity,
+			Method sourceMethod, int[] contador) {
 		// TODO Auto-generated method stub
+
+		ClassAtributes classOriginal = new ClassAtributes(
+				sourceMethod.getSourceClassID());
+
+		int indexOf = allClassSimilarity.indexOf(classOriginal);
+		
 		final int ONLYONEMETHODINDEX = 4;
 		// considera as três primeirsas posições no ranking
 		final int POSICAOMAXIMA = 3;
