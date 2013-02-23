@@ -1,7 +1,5 @@
 package refine.utils;
 
-import org.eclipse.core.commands.ITypedParameter;
-import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
@@ -11,6 +9,11 @@ public class RefineSignatures {
 	public static String getFieldSignature(String classNameA,
 			IVariableBinding iVariableBinding) throws JavaModelException {
 		// TODO Auto-generated method stub
+		
+		if (iVariableBinding == null) {
+			return classNameA;
+		}
+		
 		String fieldName = iVariableBinding.getName();
 		String fieldType = iVariableBinding.getType().getQualifiedName();
 		String signature = classNameA + "." + fieldName + ":" + fieldType;
@@ -21,6 +24,10 @@ public class RefineSignatures {
 			throws JavaModelException {
 		// TODO Auto-generated method stub
 
+		if (imethod == null) {
+			return classNameA;
+		}
+		
 		String signature = Signature.toString(imethod.getSignature());
 
 		String[] parts = signature.split(" ", 2);

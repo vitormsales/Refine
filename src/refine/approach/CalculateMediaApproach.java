@@ -18,6 +18,10 @@ import refine.utils.PrintOutput;
 
 public class CalculateMediaApproach {
 
+	final int indexCORRETA = 0;
+	final int indexSUGESTAO = 1;
+	final int indexERRADO = 3;
+
 	private class ClassAtributes { // classe interna usada somente dentro da
 									// classe
 		int classID;
@@ -58,7 +62,6 @@ public class CalculateMediaApproach {
 	private String indicationAdress;
 
 	private boolean needCalculateAll;
-	private int numberMoveSuggestions = 0;
 
 	public CalculateMediaApproach(
 			Map<Pair<Method, Method>, Parameters> allParameters,
@@ -88,7 +91,6 @@ public class CalculateMediaApproach {
 		indicationAdress = activeProjectName + " " + strategy + " indication";
 
 		int contador[] = { 0, 0, 0, 0, 0 };
-		numberMoveSuggestions = 0;
 
 		pOutput.write("\n " + strategy + "\nMetodos com menos que "
 				+ allMethods.getNumberOfExcluded()
@@ -165,16 +167,17 @@ public class CalculateMediaApproach {
 
 			writeTraceIndications(sourceMethod, allClassSimilarity);
 
-			// blindAnalisysBinary(allClassSimilarity, sourceMethod, contador);
-			blindAnalisys(allClassSimilarity, sourceMethod, contador);
+			blindAnalisysBinary(allClassSimilarity, sourceMethod, contador);
+			// blindAnalisys(allClassSimilarity, sourceMethod, contador);
 
 		}
 
+		pOutput.write(
+				" Numero de sugestoes " + contador[indexSUGESTAO] + " \n",
+				sugestionAdress);
+
 		writeStatisticsBlind(contador);
 		writeExcelFormat(contador, strategy);
-
-		pOutput.write(" Numero de sugestoes " + numberMoveSuggestions + " \n",
-				sugestionAdress);
 
 		if (!needCalculateAll) {
 
@@ -257,7 +260,7 @@ public class CalculateMediaApproach {
 					if (valor != null) {
 						classPossibleID = valor;
 					} else {
-						classPossibleID = treatyNameID(possibleCandidates);
+						classPossibleID = treatyClassNameID(possibleCandidates);
 					}
 
 					if (idCandidates == classPossibleID) {
@@ -274,7 +277,7 @@ public class CalculateMediaApproach {
 		return false;
 	}
 
-	private int treatyNameID(String possibleCandidates) {
+	private int treatyClassNameID(String possibleCandidates) {
 		// TODO Auto-generated method stub
 
 		int indexBegin = possibleCandidates.indexOf('<');
@@ -287,45 +290,37 @@ public class CalculateMediaApproach {
 		return -1;
 	}
 
-	private void writeStatisticsBlind(int[] contador) {
-		float total = 0;
-
-		for (int num : contador) {
-			total += num;
-		}
-
-		pOutput.write("1º " + contador[0] + " " + 100 * contador[0] / total
-				+ "%\n", blindAdress);
-		pOutput.write("2º " + contador[1] + " " + 100 * contador[1] / total
-				+ "%\n", blindAdress);
-		pOutput.write("3º " + contador[2] + " " + 100 * contador[2] / total
-				+ "%\n", blindAdress);
-		pOutput.write("Erros " + contador[3] + " " + 100 * contador[3] / total
-				+ "%\n", blindAdress);
-		pOutput.write("Classes com apenas 1 método " + contador[4] + " " + 100
-				* contador[4] / total + "%\n", blindAdress);
-		pOutput.write("Total " + (int) total + " " + 100 * total / total
-				+ "%\n", blindAdress);
-
-	}
-
 	private void writeExcelFormat(int[] contador, CoefficientStrategy strategy) {
 		// TODO Auto-generated method stub
 
 		float total = 0;
 
-		for (int num : contador) {
-			total += num;
-		}
+		total += contador[indexCORRETA] + contador[indexERRADO];
 
 		String excell = "Excell" + activeProjectName;
 
 		pOutput.write("\n" + strategy + "\t ", excell);
-		pOutput.write(contador[0] + "\t ", excell);
-		pOutput.write(contador[1] + "\t ", excell);
-		pOutput.write(contador[2] + "\t ", excell);
-		pOutput.write(contador[3] + "\t ", excell);
+		pOutput.write(contador[indexCORRETA] + "\t ", excell);
+		pOutput.write(contador[indexSUGESTAO] + "\t ", excell);
+		pOutput.write(contador[indexERRADO] + "\t ", excell);
 		pOutput.write((int) total + "\t ", excell);
+	}
+
+	private void writeStatisticsBlind(int[] contador) {
+		float total = 0;
+
+		total += contador[indexCORRETA] + contador[indexERRADO];
+
+		pOutput.write("Correto " + contador[indexCORRETA] + " " + 100
+				* contador[indexCORRETA] / total + "%\n", blindAdress);
+		pOutput.write("Sugestões " + contador[indexSUGESTAO] + " " + 100
+				* contador[indexSUGESTAO] / contador[indexERRADO] + "%\n",
+				blindAdress);
+		pOutput.write("Erros " + contador[indexERRADO] + " " + 100
+				* contador[indexERRADO] / total + "%\n", blindAdress);
+		pOutput.write("Total " + (int) total + " " + 100 * total / total
+				+ "%\n", blindAdress);
+
 	}
 
 	private void blindAnalisysBinary(List<ClassAtributes> allClassSimilarity,
@@ -336,7 +331,6 @@ public class CalculateMediaApproach {
 				sourceMethod.getSourceClassID());
 
 		final int POSICAOMAXIMA = 3;
-		final int POSICAOCORRETA = 0;
 		final double PORCENTAGEM = 0.03;
 		final double MAXIMAPORCENTAGEM = 0.10;
 
@@ -360,7 +354,7 @@ public class CalculateMediaApproach {
 
 			if (index > allClassSimilarity.size()) {
 				index++;
-				//System.out.println(classOriginalIndex);
+				// System.out.println(classOriginalIndex);
 				break;
 			}
 
@@ -384,13 +378,40 @@ public class CalculateMediaApproach {
 		// System.out.println("classOriginalIndex " + classOriginalIndex);
 		// System.out.println("index " + index);
 		if (classOriginalIndex < index) {
-			contador[POSICAOCORRETA]++;
+			contador[indexCORRETA]++;
 		} else {
-			contador[POSICAOMAXIMA]++;
+			contador[indexERRADO]++;
 		}
 		// System.out.println();
 		if (checkPossibleSugestion(sourceMethod, allClassSimilarity, index)) {
-			numberMoveSuggestions++;
+			contador[indexSUGESTAO]++;
+		}
+
+	}
+
+	private void blindAnalisys(List<ClassAtributes> allClassSimilarity,
+			Method sourceMethod, int[] contador) {
+		// TODO Auto-generated method stub
+
+		ClassAtributes classOriginal = new ClassAtributes(
+				sourceMethod.getSourceClassID());
+
+		int indexOf = allClassSimilarity.indexOf(classOriginal);
+
+		final int ONLYONEMETHODINDEX = 4;
+		// considera as três primeirsas posições no ranking
+		final int POSICAOMAXIMA = 2;
+
+		if (indexOf > POSICAOMAXIMA)
+			contador[POSICAOMAXIMA + 1]++;
+		else if (indexOf < 0)
+			contador[ONLYONEMETHODINDEX]++;
+		else
+			contador[indexOf]++;
+
+		if (checkPossibleSugestion(sourceMethod, allClassSimilarity,
+				POSICAOMAXIMA)) {
+			contador[indexSUGESTAO]++;
 		}
 
 	}
@@ -424,33 +445,6 @@ public class CalculateMediaApproach {
 					indicationAdress);
 		}
 		pOutput.write("\n", indicationAdress);
-
-	}
-
-	private void blindAnalisys(List<ClassAtributes> allClassSimilarity,
-			Method sourceMethod, int[] contador) {
-		// TODO Auto-generated method stub
-
-		ClassAtributes classOriginal = new ClassAtributes(
-				sourceMethod.getSourceClassID());
-
-		int indexOf = allClassSimilarity.indexOf(classOriginal);
-
-		final int ONLYONEMETHODINDEX = 4;
-		// considera as três primeirsas posições no ranking
-		final int POSICAOMAXIMA = 2;
-
-		if (indexOf > POSICAOMAXIMA)
-			contador[POSICAOMAXIMA+1]++;
-		else if (indexOf < 0)
-			contador[ONLYONEMETHODINDEX]++;
-		else
-			contador[indexOf]++;
-
-		if (checkPossibleSugestion(sourceMethod, allClassSimilarity,
-				POSICAOMAXIMA)) {
-			numberMoveSuggestions++;
-		}
 
 	}
 

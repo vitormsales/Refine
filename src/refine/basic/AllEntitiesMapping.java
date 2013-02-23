@@ -2,13 +2,9 @@ package refine.basic;
 
 import java.util.AbstractMap;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.Signature;
-import org.eclipse.jdt.core.dom.IVariableBinding;
 
 import refine.ast.DeepDependencyVisitor;
 import refine.dependencies.AccessFieldDependency;
@@ -21,7 +17,6 @@ import refine.dependencies.DeclareReturnDependency;
 import refine.dependencies.Dependency;
 import refine.dependencies.SimpleNameDependency;
 import refine.dependencies.ThrowDependency;
-import refine.utils.PrintOutput;
 import refine.utils.RefineSignatures;
 
 public class AllEntitiesMapping {
@@ -72,6 +67,7 @@ public class AllEntitiesMapping {
 
 					String methodA = RefineSignatures.getMethodSignature(
 							dep.getClassNameA(), acDependency.getImethodA());
+
 					String methodB = RefineSignatures.getMethodSignature(
 							dep.getClassNameB(), acDependency.getImethodB());
 
@@ -279,50 +275,26 @@ public class AllEntitiesMapping {
 
 		}
 
-//		// ############### Imprime todas as dependencias encontradas
-//		Iterator<Integer> it = allDependeciesMapByID.keySet().iterator();
-//		PrintOutput out = new PrintOutput();
-//		String address = "Tudo";
-//		while (it.hasNext()) {
-//			String temp = allDependeciesMapByID.get(it.next());
-//			System.out.println(temp + " " + allDependeciesMapByName.get(temp));
-//			out.write(temp + " " + allDependeciesMapByName.get(temp) + "\n",
-//					address);
-//
-//		}
-//		out.write("total de possiveis dep " + allDependeciesMapByID.size(),
-//				address);
-//		out.finish(address);
-//		System.out.println("total de possiveis dep "
-//				+ allDependeciesMapByID.size());
-//		System.out.println("\nallDependecies FINISH\n\n");
-//		// ###############
+		// // ############### Imprime todas as dependencias encontradas
+		// Iterator<Integer> it = allDependeciesMapByID.keySet().iterator();
+		// PrintOutput out = new PrintOutput();
+		// String address = "Tudo";
+		// while (it.hasNext()) {
+		// String temp = allDependeciesMapByID.get(it.next());
+		// System.out.println(temp + " " + allDependeciesMapByName.get(temp));
+		// out.write(temp + " " + allDependeciesMapByName.get(temp) + "\n",
+		// address);
+		//
+		// }
+		// out.write("total de possiveis dep " + allDependeciesMapByID.size(),
+		// address);
+		// out.finish(address);
+		// System.out.println("total de possiveis dep "
+		// + allDependeciesMapByID.size());
+		// System.out.println("\nallDependecies FINISH\n\n");
+		// // ###############
 
 	}
-
-	// private String getFieldSignature(String classNameA,
-	// IVariableBinding iVariableBinding) throws JavaModelException {
-	// // TODO Auto-generated method stub
-	// String fieldName = iVariableBinding.getName();
-	// String fieldType = iVariableBinding.getType().getName();
-	// String signature = classNameA + "::" + fieldName + ":" + fieldType;
-	//
-	// return signature;
-	// }
-	//
-	// private String getMethodSignature(String classNameA, IMethod imethod)
-	// throws JavaModelException {
-	// // TODO Auto-generated method stub
-	//
-	// String signature = Signature.getSignatureSimpleName(imethod
-	// .getSignature());
-	//
-	// String[] parts = signature.split(" ", 2);
-	//
-	// signature = classNameA + "::" + imethod.getElementName()
-	// + parts[1].replace('/', '.') + ":" + parts[0].replace('/', '.');
-	// return signature;
-	// }
 
 	private void insertMapping(String string) {
 		// TODO Auto-generated method stub

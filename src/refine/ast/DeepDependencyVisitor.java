@@ -594,8 +594,6 @@ public class DeepDependencyVisitor extends ASTVisitor {
 
 				if (node.resolveBinding() instanceof IVariableBinding) {
 					ivBinding = (IVariableBinding) node.resolveBinding();
-				} else {
-					throw new NullPointerException();
 				}
 
 				this.dependencies.add(new AccessFieldDependency(this.className,

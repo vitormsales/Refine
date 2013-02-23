@@ -317,33 +317,33 @@ public class AllMethods {
 		}
 
 		// // #............ Imprime dependencias
-		System.out.println("allMethodsList  " + allMethodsList.size());
-
-		Iterator<Method> it = allMethodsList.iterator();
-		while (it.hasNext()) {
-			Method m = it.next();
-			System.out.println();
-
-			System.out.println(AllEntitiesMapping.getInstance().getByID(
-					m.getNameID())
-					+ " id " + m.getNameID());
-			System.out.println(AllEntitiesMapping.getInstance().getByID(
-					m.getSourceClassID())
-					+ " id " + m.getSourceClassID());
-
-			System.out.println();
-			for (Integer chaves : m.getMethodsDependencies()) {
-				System.out.println(AllEntitiesMapping.getInstance().getByID(
-						chaves)
-						+ " id " + chaves);
-
-			}
-
-			for (Integer chaves : m.getMethodsDependencies()) {
-				System.out.println(chaves);
-			}
-			System.out.println();
-		}
+//		System.out.println("allMethodsList  " + allMethodsList.size());
+//
+//		Iterator<Method> it = allMethodsList.iterator();
+//		while (it.hasNext()) {
+//			Method m = it.next();
+//			System.out.println();
+//
+//			System.out.println(AllEntitiesMapping.getInstance().getByID(
+//					m.getNameID())
+//					+ " id " + m.getNameID());
+//			System.out.println(AllEntitiesMapping.getInstance().getByID(
+//					m.getSourceClassID())
+//					+ " id " + m.getSourceClassID());
+//
+//			System.out.println();
+//			for (Integer chaves : m.getMethodsDependencies()) {
+//				System.out.println(AllEntitiesMapping.getInstance().getByID(
+//						chaves)
+//						+ " id " + chaves);
+//
+//			}
+//
+//			for (Integer chaves : m.getMethodsDependencies()) {
+//				System.out.println(chaves);
+//			}
+//			System.out.println();
+//		}
 		// //#............
 
 	}
@@ -444,7 +444,7 @@ public class AllMethods {
 			Entry<Integer, IMethod> entry = it.next();
 			IMethod method = entry.getValue();
 			try {
-				if (method.isConstructor()) {
+				if (method !=null && method.isConstructor()) {
 					Method methodTemp = getMethodByID(entry.getKey());
 					int index = allMethodsList.indexOf(methodTemp);
 					allMethodsList.remove(index);
