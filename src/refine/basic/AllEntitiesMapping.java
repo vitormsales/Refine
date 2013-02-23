@@ -279,24 +279,24 @@ public class AllEntitiesMapping {
 
 		}
 
-		// ############### Imprime todas as dependencias encontradas
-		Iterator<Integer> it = allDependeciesMapByID.keySet().iterator();
-		PrintOutput out = new PrintOutput();
-		String address = "Tudo";
-		while (it.hasNext()) {
-			String temp = allDependeciesMapByID.get(it.next());
-			System.out.println(temp + " " + allDependeciesMapByName.get(temp));
-			out.write(temp + " " + allDependeciesMapByName.get(temp) + "\n",
-					address);
-
-		}
-		out.write("total de possiveis dep " + allDependeciesMapByID.size(),
-				address);
-		out.finish(address);
-		System.out.println("total de possiveis dep "
-				+ allDependeciesMapByID.size());
-		System.out.println("\nallDependecies FINISH\n\n");
-		// ###############
+//		// ############### Imprime todas as dependencias encontradas
+//		Iterator<Integer> it = allDependeciesMapByID.keySet().iterator();
+//		PrintOutput out = new PrintOutput();
+//		String address = "Tudo";
+//		while (it.hasNext()) {
+//			String temp = allDependeciesMapByID.get(it.next());
+//			System.out.println(temp + " " + allDependeciesMapByName.get(temp));
+//			out.write(temp + " " + allDependeciesMapByName.get(temp) + "\n",
+//					address);
+//
+//		}
+//		out.write("total de possiveis dep " + allDependeciesMapByID.size(),
+//				address);
+//		out.finish(address);
+//		System.out.println("total de possiveis dep "
+//				+ allDependeciesMapByID.size());
+//		System.out.println("\nallDependecies FINISH\n\n");
+//		// ###############
 
 	}
 

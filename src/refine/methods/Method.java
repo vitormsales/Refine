@@ -56,13 +56,12 @@ public class Method {
 	public boolean mustRemoveTypes(String dependency) {
 
 		if (dependency.contains("::")) {
-			return true;
+			return false;
 		}
 
 		if (dependency.contains(":")) {
 			String part[] = dependency.split(":", 2);
 			dependency = part[1];
-			System.out.println(" dependecia de atributo " + dependency);
 		}
 		if (JavaTypes.isPrimitive(dependency)) {
 			return true;

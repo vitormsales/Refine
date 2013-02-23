@@ -88,6 +88,7 @@ public class CalculateMediaApproach {
 		indicationAdress = activeProjectName + " " + strategy + " indication";
 
 		int contador[] = { 0, 0, 0, 0, 0 };
+		numberMoveSuggestions = 0;
 
 		pOutput.write("\n " + strategy + "\nMetodos com menos que "
 				+ allMethods.getNumberOfExcluded()
@@ -218,7 +219,7 @@ public class CalculateMediaApproach {
 
 		int MyPosition = allClassSimilarity.indexOf(classOriginal);
 
-		if (MyPosition >= posMax) {
+		if (MyPosition > posMax) {
 			int[] CandidateClassID = new int[posMax];
 
 			for (int i = 0; i < posMax; i++) {
@@ -357,9 +358,9 @@ public class CalculateMediaApproach {
 			// System.out.println("First " + first);
 			index++;
 
-			if (index >= allClassSimilarity.size()) {
+			if (index > allClassSimilarity.size()) {
 				index++;
-				System.out.println(classOriginalIndex);
+				//System.out.println(classOriginalIndex);
 				break;
 			}
 
@@ -434,17 +435,22 @@ public class CalculateMediaApproach {
 				sourceMethod.getSourceClassID());
 
 		int indexOf = allClassSimilarity.indexOf(classOriginal);
-		
+
 		final int ONLYONEMETHODINDEX = 4;
 		// considera as três primeirsas posições no ranking
-		final int POSICAOMAXIMA = 3;
+		final int POSICAOMAXIMA = 2;
 
-		if (indexOf >= POSICAOMAXIMA)
-			contador[POSICAOMAXIMA]++;
+		if (indexOf > POSICAOMAXIMA)
+			contador[POSICAOMAXIMA+1]++;
 		else if (indexOf < 0)
 			contador[ONLYONEMETHODINDEX]++;
 		else
 			contador[indexOf]++;
+
+		if (checkPossibleSugestion(sourceMethod, allClassSimilarity,
+				POSICAOMAXIMA)) {
+			numberMoveSuggestions++;
+		}
 
 	}
 
