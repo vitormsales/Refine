@@ -245,8 +245,8 @@ public class CalculateMediaClassApproach {
 				sourceMethod.getSourceClassID());
 
 		final int POSICAOMAXIMA = 3;
-		final double PORCENTAGEM = 0.03;
-		final double MAXIMAPORCENTAGEM = 0.10;
+		final double PORCENTAGEM = 0.1;
+		final double MAXIMAPORCENTAGEM = 0.30;
 
 		int classOriginalIndex = allClassSimilarity.indexOf(classOriginal);
 		int index = 0;
@@ -347,6 +347,9 @@ public class CalculateMediaClassApproach {
 	private void writeStatisticsBlind(int[] contador) {
 		float total = 0;
 
+		if (contador[indexERRADO] == 0)
+			contador[indexERRADO] = 1;
+		
 		total += contador[indexCORRETA] + contador[indexERRADO];
 
 		pOutput.write("Correto " + contador[indexCORRETA] + " " + 100

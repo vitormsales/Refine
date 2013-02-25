@@ -331,8 +331,8 @@ public class CalculateMediaApproach {
 				sourceMethod.getSourceClassID());
 
 		final int POSICAOMAXIMA = 3;
-		final double PORCENTAGEM = 0.03;
-		final double MAXIMAPORCENTAGEM = 0.10;
+		final double PORCENTAGEM = 0.5;
+		final double MAXIMAPORCENTAGEM = 0.15;
 
 		int classOriginalIndex = allClassSimilarity.indexOf(classOriginal);
 		int index = 0;

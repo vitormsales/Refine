@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import refine.basic.AllEntitiesMapping;
-import refine.utils.JavaTypes;
 
 public class Method {
 
@@ -43,43 +42,13 @@ public class Method {
 
 		int depedencyID;
 		for (String name : dependeciesList) {
-			if (!mustRemoveTypes(name)) {
-				depedencyID = AllEntitiesMapping.getInstance().getByName(name);
-				methodsDependenciesID.add(depedencyID);
-				AllDependenciesMethods.getInstance()
-						.getAllDependenciesMethodID().add(depedencyID);
-			}
+			depedencyID = AllEntitiesMapping.getInstance().getByName(name);
+			methodsDependenciesID.add(depedencyID);
+			AllDependenciesMethods.getInstance().getAllDependenciesMethodID()
+					.add(depedencyID);
+
 		}
 
-	}
-
-	public boolean mustRemoveTypes(String dependency) {
-
-		if (dependency.contains("::")) {
-			return false;
-		}
-
-		if (dependency.contains(":")) {
-			String part[] = dependency.split(":", 2);
-			dependency = part[1];
-		}
-		if (JavaTypes.isPrimitive(dependency)) {
-			return true;
-		}
-
-		if (JavaTypes.isString(dependency)) {
-			return true;
-		}
-
-		if (JavaTypes.isWrapper(dependency)) {
-			return true;
-		}
-
-		if (JavaTypes.Object(dependency)) {
-			return true;
-		}
-
-		return false;
 	}
 
 	@Override

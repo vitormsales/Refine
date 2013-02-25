@@ -24,6 +24,7 @@ import refine.dependencies.DeclareReturnDependency;
 import refine.dependencies.Dependency;
 import refine.dependencies.SimpleNameDependency;
 import refine.dependencies.ThrowDependency;
+import refine.utils.JavaTypes;
 import refine.utils.MoveMethod;
 import refine.utils.RefineSignatures;
 
@@ -87,15 +88,16 @@ public class AllMethods {
 					// + ((AccessMethodDependency) dep).getMethodNameB()
 					// + "()";
 
-					List<String> dependeciesList = new ArrayList<String>();
-					dependeciesList.add(dependecyClass);
-					dependeciesList.add(methodB);
+					List<String> dependeciesList = putDependecyOnList(
+							dependecyClass, methodB);
 
-					putIMethodInMapping(methodA, acDependency.getImethodA());
-					putIMethodInMapping(methodB, acDependency.getImethodB());
+					if (dependeciesList != null) {
+						putIMethodInMapping(methodA, acDependency.getImethodA());
+						putIMethodInMapping(methodB, acDependency.getImethodB());
 
-					createMethod(methodA, sourceClass, dependeciesList,
-							acDependency.getImethodA());
+						createMethod(methodA, sourceClass, dependeciesList,
+								acDependency.getImethodA());
+					}
 
 				}
 
@@ -120,15 +122,16 @@ public class AllMethods {
 					// String field = dep.getClassNameB() + "."
 					// + ((AccessFieldDependency) dep).getFieldName();
 
-					List<String> dependeciesList = new ArrayList<String>();
-					dependeciesList.add(dependecyClass);
-					dependeciesList.add(field);
+					List<String> dependeciesList = putDependecyOnList(
+							dependecyClass, field);
 
-					putIMethodInMapping(methodA,
-							acFieldDependency.getImethodA());
+					if (dependeciesList != null) {
+						putIMethodInMapping(methodA,
+								acFieldDependency.getImethodA());
 
-					createMethod(methodA, sourceClass, dependeciesList,
-							acFieldDependency.getImethodA());
+						createMethod(methodA, sourceClass, dependeciesList,
+								acFieldDependency.getImethodA());
+					}
 
 				}
 
@@ -153,13 +156,14 @@ public class AllMethods {
 							snDependency.getiVariableBinding());
 
 					List<String> dependeciesList = new ArrayList<String>();
-					dependeciesList.add(dependecyClass);
-					dependeciesList.add(field);
+					putDependecyOnList(dependecyClass, field);
 
-					putIMethodInMapping(methodA, snDependency.getImethodA());
+					if (dependeciesList != null) {
+						putIMethodInMapping(methodA, snDependency.getImethodA());
 
-					createMethod(methodA, sourceClass, dependeciesList,
-							snDependency.getImethodA());
+						createMethod(methodA, sourceClass, dependeciesList,
+								snDependency.getImethodA());
+					}
 
 				}
 
@@ -176,13 +180,14 @@ public class AllMethods {
 					String methodA = RefineSignatures.getMethodSignature(
 							dep.getClassNameA(), anDependency.getImethodA());
 
-					List<String> dependeciesList = new ArrayList<String>();
-					dependeciesList.add(dependecyClass);
+					List<String> dependeciesList = putDependecyOnList(dependecyClass);
 
-					putIMethodInMapping(methodA, anDependency.getImethodA());
+					if (dependeciesList != null) {
+						putIMethodInMapping(methodA, anDependency.getImethodA());
 
-					createMethod(methodA, sourceClass, dependeciesList,
-							anDependency.getImethodA());
+						createMethod(methodA, sourceClass, dependeciesList,
+								anDependency.getImethodA());
+					}
 
 				}
 
@@ -200,13 +205,14 @@ public class AllMethods {
 					// + ((CreateMethodDependency) dep).getMethodNameA()
 					// + "()";
 
-					List<String> dependeciesList = new ArrayList<String>();
-					dependeciesList.add(dependecyClass);
+					List<String> dependeciesList = putDependecyOnList(dependecyClass);
 
-					putIMethodInMapping(methodA, cmDependency.getImethodA());
+					if (dependeciesList != null) {
+						putIMethodInMapping(methodA, cmDependency.getImethodA());
 
-					createMethod(methodA, sourceClass, dependeciesList,
-							cmDependency.getImethodA());
+						createMethod(methodA, sourceClass, dependeciesList,
+								cmDependency.getImethodA());
+					}
 
 				}
 
@@ -227,14 +233,14 @@ public class AllMethods {
 					// String field = dep.getClassNameB() + "."
 					// + ((DeclareParameterDependency) dep).getFieldName();
 
-					List<String> dependeciesList = new ArrayList<String>();
-					dependeciesList.add(dependecyClass);
-					// dependeciesList.add(field);
+					List<String> dependeciesList = putDependecyOnList(dependecyClass);
 
-					putIMethodInMapping(methodA, dpDependency.getImethodA());
+					if (dependeciesList != null) {
+						putIMethodInMapping(methodA, dpDependency.getImethodA());
 
-					createMethod(methodA, sourceClass, dependeciesList,
-							dpDependency.getImethodA());
+						createMethod(methodA, sourceClass, dependeciesList,
+								dpDependency.getImethodA());
+					}
 
 				}
 
@@ -251,13 +257,14 @@ public class AllMethods {
 					// + ((DeclareReturnDependency) dep).getMethodName()
 					// + "()";
 
-					List<String> dependeciesList = new ArrayList<String>();
-					dependeciesList.add(dependecyClass);
+					List<String> dependeciesList = putDependecyOnList(dependecyClass);
 
-					putIMethodInMapping(methodA, drDependency.getImethodA());
+					if (dependeciesList != null) {
+						putIMethodInMapping(methodA, drDependency.getImethodA());
 
-					createMethod(methodA, sourceClass, dependeciesList,
-							drDependency.getImethodA());
+						createMethod(methodA, sourceClass, dependeciesList,
+								drDependency.getImethodA());
+					}
 
 				}
 
@@ -279,14 +286,15 @@ public class AllMethods {
 					// + ((DeclareLocalVariableDependency) dep)
 					// .getFieldName();
 
-					List<String> dependeciesList = new ArrayList<String>();
-					dependeciesList.add(dependecyClass);
-					// dependeciesList.add(field);
+					List<String> dependeciesList = putDependecyOnList(dependecyClass);
 
-					putIMethodInMapping(methodA, dlvDependency.getImethodA());
+					if (dependeciesList != null) {
+						putIMethodInMapping(methodA,
+								dlvDependency.getImethodA());
 
-					createMethod(methodA, sourceClass, dependeciesList,
-							dlvDependency.getImethodA());
+						createMethod(methodA, sourceClass, dependeciesList,
+								dlvDependency.getImethodA());
+					}
 
 				}
 
@@ -302,13 +310,15 @@ public class AllMethods {
 					// String method = dep.getClassNameA() + "."
 					// + ((ThrowDependency) dep).getMethodName() + "()";
 
-					List<String> dependeciesList = new ArrayList<String>();
-					dependeciesList.add(dependecyClass);
+					List<String> dependeciesList = putDependecyOnList(dependecyClass);
+					
+					if (dependeciesList != null) {
+						putIMethodInMapping(methodA,
+								throwDependency.getImethodA());
 
-					putIMethodInMapping(methodA, throwDependency.getImethodA());
-
-					createMethod(methodA, sourceClass, dependeciesList,
-							throwDependency.getImethodA());
+						createMethod(methodA, sourceClass, dependeciesList,
+								throwDependency.getImethodA());
+					}
 
 				}
 
@@ -317,35 +327,61 @@ public class AllMethods {
 		}
 
 		// // #............ Imprime dependencias
-//		System.out.println("allMethodsList  " + allMethodsList.size());
-//
-//		Iterator<Method> it = allMethodsList.iterator();
-//		while (it.hasNext()) {
-//			Method m = it.next();
-//			System.out.println();
-//
-//			System.out.println(AllEntitiesMapping.getInstance().getByID(
-//					m.getNameID())
-//					+ " id " + m.getNameID());
-//			System.out.println(AllEntitiesMapping.getInstance().getByID(
-//					m.getSourceClassID())
-//					+ " id " + m.getSourceClassID());
-//
-//			System.out.println();
-//			for (Integer chaves : m.getMethodsDependencies()) {
-//				System.out.println(AllEntitiesMapping.getInstance().getByID(
-//						chaves)
-//						+ " id " + chaves);
-//
-//			}
-//
-//			for (Integer chaves : m.getMethodsDependencies()) {
-//				System.out.println(chaves);
-//			}
-//			System.out.println();
-//		}
+		 System.out.println("allMethodsList  " + allMethodsList.size());
+		
+		 Iterator<Method> it = allMethodsList.iterator();
+		 while (it.hasNext()) {
+		 Method m = it.next();
+		 System.out.println();
+		
+		 System.out.println(AllEntitiesMapping.getInstance().getByID(
+		 m.getNameID())
+		 + " id " + m.getNameID());
+		 System.out.println(AllEntitiesMapping.getInstance().getByID(
+		 m.getSourceClassID())
+		 + " id " + m.getSourceClassID());
+		
+		 System.out.println();
+		 for (Integer chaves : m.getMethodsDependencies()) {
+		 System.out.println(AllEntitiesMapping.getInstance().getByID(
+		 chaves)
+		 + " id " + chaves);
+		
+		 }
+		
+		 for (Integer chaves : m.getMethodsDependencies()) {
+		 System.out.println(chaves);
+		 }
+		 System.out.println();
+		 }
 		// //#............
 
+	}
+
+	private List<String> putDependecyOnList(String dependecyClass) {
+
+		if (!JavaTypes.canInsertTypes(dependecyClass)) {
+			return null;
+		}
+
+		List<String> dependeciesList = new ArrayList<String>();
+		dependeciesList.add(dependecyClass);
+
+		return dependeciesList;
+	}
+
+	private List<String> putDependecyOnList(String dependecyClass,
+			String secundaryDependency) {
+
+		if (!JavaTypes.canInsertTypes(dependecyClass)) {
+			return null;
+		}
+
+		List<String> dependeciesList = putDependecyOnList(dependecyClass);
+		List<String> secundaryList = putDependecyOnList(secundaryDependency);
+		dependeciesList.addAll(secundaryList);
+
+		return dependeciesList;
 	}
 
 	private void createMethod(String methodName, String sourceClass,
@@ -444,7 +480,7 @@ public class AllMethods {
 			Entry<Integer, IMethod> entry = it.next();
 			IMethod method = entry.getValue();
 			try {
-				if (method !=null && method.isConstructor()) {
+				if (method != null && method.isConstructor()) {
 					Method methodTemp = getMethodByID(entry.getKey());
 					int index = allMethodsList.indexOf(methodTemp);
 					allMethodsList.remove(index);
