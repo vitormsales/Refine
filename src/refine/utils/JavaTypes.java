@@ -2,6 +2,9 @@ package refine.utils;
 
 public class JavaTypes {
 
+	private final static String[] anottationTypes = { "java.lang.Override",
+			"java.lang.SuppressWarnings" };
+	
 	private final static String[] primitivesTypes = { "boolean", "byte",
 			"char", "int", "long", "float", "double" };
 
@@ -12,11 +15,14 @@ public class JavaTypes {
 
 	private final static String stringTypes[] = { "java.lang.String",
 			"java.lang.StringBuilder", "java.lang.StringBuffer" };
+
 	private final static String object = ("java.lang.Object");
 
-	public static boolean isPrimitive(String valor) {
+	private final static String javaUtils = ("java.util");
+
+	public static boolean isPrimitive(String dependency) {
 		for (String primitive : primitivesTypes) {
-			if (valor.equals(primitive)) {
+			if (dependency.equals(primitive)) {
 				return true;
 			}
 		}
@@ -24,9 +30,18 @@ public class JavaTypes {
 		return false;
 	}
 
-	public static boolean isWrapper(String valor) {
+	public static boolean isAnnotation(String dependency) {
+		for (String anottation : anottationTypes) {
+			if (dependency.equals(anottation)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isWrapper(String dependency) {
 		for (String wrapper : warppersTypes) {
-			if (valor.equals(wrapper)) {
+			if (dependency.equals(wrapper)) {
 				return true;
 			}
 		}
@@ -34,23 +49,38 @@ public class JavaTypes {
 		return false;
 	}
 
-	public static boolean isString(String valor) {
+	public static boolean isString(String dependency) {
 		for (String string : stringTypes) {
-			if (valor.equals(string)) {
+			if (dependency.equals(string)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public static boolean Object(String valor) {
-		if (valor.equals(object)) {
+	public static boolean Object(String dependency) {
+		if (dependency.equals(object)) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isUtil(String dependency) {
+		if (dependency.startsWith(javaUtils)) {
 			return true;
 		}
 		return false;
 	}
 
 	public static boolean mustRemoveTypes(String dependency) {
+
+		if (JavaTypes.isUtil(dependency)) {
+			return true;
+		}
+
+		if (JavaTypes.isAnnotation(dependency)) {
+			return true;
+		}
 
 		if (JavaTypes.isPrimitive(dependency)) {
 			return true;

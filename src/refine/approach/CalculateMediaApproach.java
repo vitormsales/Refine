@@ -213,10 +213,10 @@ public class CalculateMediaApproach {
 			List<ClassAtributes> allClassSimilarity, int posMax) {
 		// TODO Auto-generated method stub
 
-		final int NUMDEPENDENCIAMIN = 5;
-		if (sourceMethod.getMethodsDependencies().size() < NUMDEPENDENCIAMIN) {
-			return false;
-		}
+//		final int NUMDEPENDENCIAMIN = 5;
+//		if (sourceMethod.getMethodsDependencies().size() < NUMDEPENDENCIAMIN) {
+//			return false;
+//		}
 		
 		ClassAtributes classOriginal = new ClassAtributes(
 				sourceMethod.getSourceClassID());
