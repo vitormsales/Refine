@@ -54,7 +54,6 @@ public class CalculateMediaApproach {
 	private AllMethods allMethods;
 
 	// ###### variaveis para excrita
-	private PrintOutput pOutput;
 	private String activeProjectName;
 
 	private String blindAdress;
@@ -71,7 +70,6 @@ public class CalculateMediaApproach {
 		this.allMethods = allMethods;
 
 		// ###### variaveis para escrita
-		this.pOutput = new PrintOutput();
 		this.activeProjectName = activeProjectName;
 		this.blindAdress = activeProjectName + "SaidaBlind";
 		this.sugestionAdress = activeProjectName + "SaidaSugestao";
@@ -92,13 +90,13 @@ public class CalculateMediaApproach {
 
 		int contador[] = { 0, 0, 0, 0, 0 };
 
-		pOutput.write("\n " + strategy + "\nMetodos com menos que "
+		PrintOutput.write("\n " + strategy + "\nMetodos com menos que "
 				+ allMethods.getNumberOfExcluded()
 				+ " dependencias excluidos\n", blindAdress);
-		pOutput.write("\n " + strategy + "\nMetodos com menos que "
+		PrintOutput.write("\n " + strategy + "\nMetodos com menos que "
 				+ allMethods.getNumberOfExcluded()
 				+ " dependencias excluidos\n", sugestionAdress);
-		pOutput.write("\n " + strategy + "\nMetodos com menos que "
+		PrintOutput.write("\n " + strategy + "\nMetodos com menos que "
 				+ allMethods.getNumberOfExcluded()
 				+ " dependencias excluidos\n", indicationAdress);
 
@@ -167,25 +165,23 @@ public class CalculateMediaApproach {
 
 			writeTraceIndications(sourceMethod, allClassSimilarity);
 
-			blindAnalisysBinary(allClassSimilarity, sourceMethod, contador);
-			// blindAnalisys(allClassSimilarity, sourceMethod, contador);
+			blindAnalisys(allClassSimilarity, sourceMethod, contador);
 
 		}
 
-		pOutput.write(
-				" Numero de sugestoes " + contador[indexSUGESTAO] + " \n",
-				sugestionAdress);
+		PrintOutput.write(" Numero de sugestoes " + contador[indexSUGESTAO]
+				+ " \n", sugestionAdress);
 
 		writeStatisticsBlind(contador);
 		writeExcelFormat(contador, strategy);
 
 		if (!needCalculateAll) {
 
-			pOutput.finish(blindAdress);
+			PrintOutput.finish(blindAdress);
 
-			pOutput.finish(sugestionAdress);
+			PrintOutput.finish(sugestionAdress);
 
-			pOutput.finish(indicationAdress);
+			PrintOutput.finish(indicationAdress);
 		}
 
 	}
@@ -217,6 +213,11 @@ public class CalculateMediaApproach {
 			List<ClassAtributes> allClassSimilarity, int posMax) {
 		// TODO Auto-generated method stub
 
+		final int NUMDEPENDENCIAMIN = 5;
+		if (sourceMethod.getMethodsDependencies().size() < NUMDEPENDENCIAMIN) {
+			return false;
+		}
+		
 		ClassAtributes classOriginal = new ClassAtributes(
 				sourceMethod.getSourceClassID());
 
@@ -264,7 +265,7 @@ public class CalculateMediaApproach {
 					}
 
 					if (idCandidates == classPossibleID) {
-						pOutput.write(" Mover " + sourceMethod
+						PrintOutput.write(" Mover " + sourceMethod
 								+ " para classe " + possibleCandidates + "\n",
 								sugestionAdress);
 
@@ -299,95 +300,100 @@ public class CalculateMediaApproach {
 
 		String excell = "Excell" + activeProjectName;
 
-		pOutput.write("\n" + strategy + "\t ", excell);
-		pOutput.write(contador[indexCORRETA] + "\t ", excell);
-		pOutput.write(contador[indexSUGESTAO] + "\t ", excell);
-		pOutput.write(contador[indexERRADO] + "\t ", excell);
-		pOutput.write((int) total + "\t ", excell);
+		PrintOutput.write("\n" + strategy + "\t ", excell);
+		PrintOutput.write(contador[indexCORRETA] + "\t ", excell);
+		PrintOutput.write(contador[indexSUGESTAO] + "\t ", excell);
+		PrintOutput.write(contador[indexERRADO] + "\t ", excell);
+		PrintOutput.write((int) total + "\t ", excell);
 	}
 
 	private void writeStatisticsBlind(int[] contador) {
 		float total = 0;
 
+		if (contador[indexERRADO] == 0) {
+			contador[indexERRADO] = 1;
+		}
+
 		total += contador[indexCORRETA] + contador[indexERRADO];
 
-		pOutput.write("Correto " + contador[indexCORRETA] + " " + 100
+		PrintOutput.write("Correto " + contador[indexCORRETA] + " " + 100
 				* contador[indexCORRETA] / total + "%\n", blindAdress);
-		pOutput.write("Sugestões " + contador[indexSUGESTAO] + " " + 100
+		PrintOutput.write("Sugestões " + contador[indexSUGESTAO] + " " + 100
 				* contador[indexSUGESTAO] / contador[indexERRADO] + "%\n",
 				blindAdress);
-		pOutput.write("Erros " + contador[indexERRADO] + " " + 100
+		PrintOutput.write("Erros " + contador[indexERRADO] + " " + 100
 				* contador[indexERRADO] / total + "%\n", blindAdress);
-		pOutput.write("Total " + (int) total + " " + 100 * total / total
+		PrintOutput.write("Total " + (int) total + " " + 100 * total / total
 				+ "%\n", blindAdress);
 
 	}
 
-	private void blindAnalisysBinary(List<ClassAtributes> allClassSimilarity,
-			Method sourceMethod, int[] contador) {
-		// TODO Auto-generated method stub
-
-		ClassAtributes classOriginal = new ClassAtributes(
-				sourceMethod.getSourceClassID());
-
-		final int POSICAOMAXIMA = 3;
-		final double PORCENTAGEM = 0.5;
-		final double MAXIMAPORCENTAGEM = 0.15;
-
-		int classOriginalIndex = allClassSimilarity.indexOf(classOriginal);
-		int index = 0;
-		double firstOfAll = allClassSimilarity.get(index).similarityIndice;
-		double first = 1;
-		double next = 1;
-
-		if (classOriginalIndex < 0) {
-			System.out.println("Nao aplicavel");
-			return;
-		}
-
-		while (((first - next) / first) < PORCENTAGEM || index <= POSICAOMAXIMA) {
-
-			ClassAtributes classAtributesFirst = allClassSimilarity.get(index);
-			first = classAtributesFirst.similarityIndice;
-			// System.out.println("First " + first);
-			index++;
-
-			if (index > allClassSimilarity.size()) {
-				index++;
-				// System.out.println(classOriginalIndex);
-				break;
-			}
-
-			ClassAtributes classAtributesSecond = allClassSimilarity.get(index);
-			next = classAtributesSecond.similarityIndice;
-			// System.out.println("next " + next);
-
-			if (classOriginalIndex < index) {
-				// System.out.println("Paraou no break pos " + index);
-				break;
-			}
-
-			if ((firstOfAll - next) / firstOfAll > MAXIMAPORCENTAGEM
-					&& index >= POSICAOMAXIMA) {
-				// System.out.println("Paraou no MAXIMAPORCENTAGEM pos " +
-				// index);
-				break;
-			}
-
-		}
-		// System.out.println("classOriginalIndex " + classOriginalIndex);
-		// System.out.println("index " + index);
-		if (classOriginalIndex < index) {
-			contador[indexCORRETA]++;
-		} else {
-			contador[indexERRADO]++;
-		}
-		// System.out.println();
-		if (checkPossibleSugestion(sourceMethod, allClassSimilarity, index)) {
-			contador[indexSUGESTAO]++;
-		}
-
-	}
+	// private void blindAnalisysBinary(List<ClassAtributes> allClassSimilarity,
+	// Method sourceMethod, int[] contador) {
+	// // TODO Auto-generated method stub
+	//
+	// ClassAtributes classOriginal = new ClassAtributes(
+	// sourceMethod.getSourceClassID());
+	//
+	// final int POSICAOMAXIMA = 3;
+	// final double PORCENTAGEM = 0.03;
+	// final double MAXIMAPORCENTAGEM = 0.10;
+	//
+	// int classOriginalIndex = allClassSimilarity.indexOf(classOriginal);
+	// int index = 0;
+	// double firstOfAll = allClassSimilarity.get(index).similarityIndice;
+	// double first = 1;
+	// double next = 1;
+	//
+	// if (classOriginalIndex < 0) {
+	// System.out.println("Nao aplicavel");
+	// return;
+	// }
+	//
+	// while (((first - next) / first) < PORCENTAGEM || index <= POSICAOMAXIMA)
+	// {
+	//
+	// ClassAtributes classAtributesFirst = allClassSimilarity.get(index);
+	// first = classAtributesFirst.similarityIndice;
+	// // System.out.println("First " + first);
+	// index++;
+	//
+	// if (index > allClassSimilarity.size()) {
+	// index++;
+	// // System.out.println(classOriginalIndex);
+	// break;
+	// }
+	//
+	// ClassAtributes classAtributesSecond = allClassSimilarity.get(index);
+	// next = classAtributesSecond.similarityIndice;
+	// // System.out.println("next " + next);
+	//
+	// if (classOriginalIndex < index) {
+	// // System.out.println("Paraou no break pos " + index);
+	// break;
+	// }
+	//
+	// if ((firstOfAll - next) / firstOfAll > MAXIMAPORCENTAGEM
+	// && index >= POSICAOMAXIMA) {
+	// // System.out.println("Paraou no MAXIMAPORCENTAGEM pos " +
+	// // index);
+	// break;
+	// }
+	//
+	// }
+	// // System.out.println("classOriginalIndex " + classOriginalIndex);
+	// // System.out.println("index " + index);
+	// if (classOriginalIndex < index) {
+	// contador[indexCORRETA]++;
+	// } else {
+	// contador[indexERRADO]++;
+	// }
+	// // System.out.println();
+	// if (checkPossibleSugestion(sourceMethod, allClassSimilarity, index)) {
+	// contador[indexSUGESTAO]++;
+	// }
+	//
+	// }
 
 	private void blindAnalisys(List<ClassAtributes> allClassSimilarity,
 			Method sourceMethod, int[] contador) {
@@ -403,11 +409,11 @@ public class CalculateMediaApproach {
 		final int POSICAOMAXIMA = 2;
 
 		if (indexOf > POSICAOMAXIMA)
-			contador[POSICAOMAXIMA + 1]++;
+			contador[indexERRADO]++;
 		else if (indexOf < 0)
-			contador[ONLYONEMETHODINDEX]++;
+			contador[indexCORRETA]++;
 		else
-			contador[indexOf]++;
+			contador[indexCORRETA]++;
 
 		if (checkPossibleSugestion(sourceMethod, allClassSimilarity,
 				POSICAOMAXIMA)) {
@@ -428,23 +434,23 @@ public class CalculateMediaApproach {
 		ClassAtributes classOriginal = new ClassAtributes(
 				sourceMethod.getSourceClassID());
 
-		pOutput.write("Similaridade para método " + method + "\n",
+		PrintOutput.write("Similaridade para método " + method + "\n",
 				indicationAdress);
 
-		pOutput.write("Ranking classe original " + classe + " "
+		PrintOutput.write("Ranking classe original " + classe + " "
 				+ (allClassSimilarity.indexOf(classOriginal) + 1) + "º \n",
 				indicationAdress);
 
 		for (ClassAtributes classAtributes : allClassSimilarity) {
-			pOutput.write(
+			PrintOutput.write(
 					AllEntitiesMapping.getInstance().getByID(
 							classAtributes.classID)
 							+ " ", indicationAdress);
 
-			pOutput.write(classAtributes.similarityIndice + "\n",
+			PrintOutput.write(classAtributes.similarityIndice + "\n",
 					indicationAdress);
 		}
-		pOutput.write("\n", indicationAdress);
+		PrintOutput.write("\n", indicationAdress);
 
 	}
 
@@ -457,10 +463,10 @@ public class CalculateMediaApproach {
 			calculate(strategy);
 		}
 
-		pOutput.finish(indicationAdress);
+		PrintOutput.finish(indicationAdress);
 
-		pOutput.finish(blindAdress);
+		PrintOutput.finish(blindAdress);
 
-		pOutput.finish(sugestionAdress);
+		PrintOutput.finish(sugestionAdress);
 	}
 }

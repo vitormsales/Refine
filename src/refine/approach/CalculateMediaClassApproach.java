@@ -53,7 +53,6 @@ public class CalculateMediaClassApproach {
 	final int indexERRADO = 3;
 
 	// ###### variaveis para excrita
-	private PrintOutput pOutput;
 	private String activeProjectName;
 
 	private String blindAdress;
@@ -72,7 +71,6 @@ public class CalculateMediaClassApproach {
 		this.allClassList = allClassList;
 
 		// ###### variaveis para escrita
-		this.pOutput = new PrintOutput();
 		this.activeProjectName = activeProjectName;
 		this.blindAdress = activeProjectName + "SaidaBlind";
 		this.sugestionAdress = activeProjectName + "SaidaSugestao";
@@ -93,13 +91,13 @@ public class CalculateMediaClassApproach {
 
 		int contador[] = { 0, 0, 0, 0, 0 };
 
-		pOutput.write("\n " + strategy + "\nMetodos com menos que "
+		PrintOutput.write("\n " + strategy + "\nMetodos com menos que "
 				+ allMethods.getNumberOfExcluded()
 				+ " dependencias excluidos\n", blindAdress);
-		pOutput.write("\n " + strategy + "\nMetodos com menos que "
+		PrintOutput.write("\n " + strategy + "\nMetodos com menos que "
 				+ allMethods.getNumberOfExcluded()
 				+ " dependencias excluidos\n", sugestionAdress);
-		pOutput.write("\n " + strategy + "\nMetodos com menos que "
+		PrintOutput.write("\n " + strategy + "\nMetodos com menos que "
 				+ allMethods.getNumberOfExcluded()
 				+ " dependencias excluidos\n", indicationAdress);
 		Pair<Method, Classe> p1 = new Pair<Method, Classe>();
@@ -164,7 +162,7 @@ public class CalculateMediaClassApproach {
 
 		}
 
-		pOutput.write(
+		PrintOutput.write(
 				" Numero de sugestoes " + contador[indexSUGESTAO] + " \n",
 				sugestionAdress);
 
@@ -173,11 +171,11 @@ public class CalculateMediaClassApproach {
 
 		if (!needCalculateAll) {
 
-			pOutput.finish(blindAdress);
+			PrintOutput.finish(blindAdress);
 
-			pOutput.finish(sugestionAdress);
+			PrintOutput.finish(sugestionAdress);
 
-			pOutput.finish(indicationAdress);
+			PrintOutput.finish(indicationAdress);
 		}
 
 	}
@@ -194,23 +192,23 @@ public class CalculateMediaClassApproach {
 		ClassAtributes classOriginal = new ClassAtributes(
 				sourceMethod.getSourceClassID());
 
-		pOutput.write("Similaridade para método " + method + "\n",
+		PrintOutput.write("Similaridade para método " + method + "\n",
 				indicationAdress);
 
-		pOutput.write("Ranking classe original " + classe + " "
+		PrintOutput.write("Ranking classe original " + classe + " "
 				+ (allClassSimilarity.indexOf(classOriginal) + 1) + "º \n",
 				indicationAdress);
 
 		for (ClassAtributes classAtributes : allClassSimilarity) {
-			pOutput.write(
+			PrintOutput.write(
 					AllEntitiesMapping.getInstance().getByID(
 							classAtributes.classID)
 							+ " ", indicationAdress);
 
-			pOutput.write(classAtributes.similarityIndice + "\n",
+			PrintOutput.write(classAtributes.similarityIndice + "\n",
 					indicationAdress);
 		}
-		pOutput.write("\n", indicationAdress);
+		PrintOutput.write("\n", indicationAdress);
 
 	}
 
@@ -245,8 +243,8 @@ public class CalculateMediaClassApproach {
 				sourceMethod.getSourceClassID());
 
 		final int POSICAOMAXIMA = 3;
-		final double PORCENTAGEM = 0.1;
-		final double MAXIMAPORCENTAGEM = 0.30;
+		final double PORCENTAGEM = 0.03;
+		final double MAXIMAPORCENTAGEM = 0.10;
 
 		int classOriginalIndex = allClassSimilarity.indexOf(classOriginal);
 		int index = 0;
@@ -337,29 +335,26 @@ public class CalculateMediaClassApproach {
 
 		String excell = "Excell" + activeProjectName;
 
-		pOutput.write("\n" + strategy + "\t ", excell);
-		pOutput.write(contador[indexCORRETA] + "\t ", excell);
-		pOutput.write(contador[indexSUGESTAO] + "\t ", excell);
-		pOutput.write(contador[indexERRADO] + "\t ", excell);
-		pOutput.write((int) total + "\t ", excell);
+		PrintOutput.write("\n" + strategy + "\t ", excell);
+		PrintOutput.write(contador[indexCORRETA] + "\t ", excell);
+		PrintOutput.write(contador[indexSUGESTAO] + "\t ", excell);
+		PrintOutput.write(contador[indexERRADO] + "\t ", excell);
+		PrintOutput.write((int) total + "\t ", excell);
 	}
 
 	private void writeStatisticsBlind(int[] contador) {
 		float total = 0;
 
-		if (contador[indexERRADO] == 0)
-			contador[indexERRADO] = 1;
-		
 		total += contador[indexCORRETA] + contador[indexERRADO];
 
-		pOutput.write("Correto " + contador[indexCORRETA] + " " + 100
+		PrintOutput.write("Correto " + contador[indexCORRETA] + " " + 100
 				* contador[indexCORRETA] / total + "%\n", blindAdress);
-		pOutput.write("Sugestões " + contador[indexSUGESTAO] + " " + 100
+		PrintOutput.write("Sugestões " + contador[indexSUGESTAO] + " " + 100
 				* contador[indexSUGESTAO] / contador[indexERRADO] + "%\n",
 				blindAdress);
-		pOutput.write("Erros " + contador[indexERRADO] + " " + 100
+		PrintOutput.write("Erros " + contador[indexERRADO] + " " + 100
 				* contador[indexERRADO] / total + "%\n", blindAdress);
-		pOutput.write("Total " + (int) total + " " + 100 * total / total
+		PrintOutput.write("Total " + (int) total + " " + 100 * total / total
 				+ "%\n", blindAdress);
 
 	}
@@ -373,11 +368,11 @@ public class CalculateMediaClassApproach {
 			calculate(strategy);
 		}
 
-		pOutput.finish(indicationAdress);
+		PrintOutput.finish(indicationAdress);
 
-		pOutput.finish(blindAdress);
+		PrintOutput.finish(blindAdress);
 
-		pOutput.finish(sugestionAdress);
+		PrintOutput.finish(sugestionAdress);
 	}
 
 	private boolean checkPossibleSugestion(Method sourceMethod,
@@ -431,7 +426,7 @@ public class CalculateMediaClassApproach {
 					}
 
 					if (idCandidates == classPossibleID) {
-						pOutput.write(" Mover " + sourceMethod
+						PrintOutput.write(" Mover " + sourceMethod
 								+ " para classe " + possibleCandidates + "\n",
 								sugestionAdress);
 

@@ -5,14 +5,14 @@ public class JavaTypes {
 	private final static String[] primitivesTypes = { "boolean", "byte",
 			"char", "int", "long", "float", "double" };
 
-	private final static String[] wrappersTypes = { "java.lang.Boolean",
+	private final static String[] warppersTypes = { "java.lang.Boolean",
 			"java.lang.Byte", "java.lang.Character", "java.lang.Integer",
 			"java.lang.Long", "java.lang.Float", "java.lang.Double",
 			"java.lang.Short" };
 
-	private final static String stringsTypes[] = { "java.lang.String",
-			"java.lang.StringBuffer", "java.lang.StringBuilder" };
-	private final static String objectType = ("java.lang.Object");
+	private final static String stringTypes[] = { "java.lang.String",
+			"java.lang.StringBuilder", "java.lang.StringBuffer" };
+	private final static String object = ("java.lang.Object");
 
 	public static boolean isPrimitive(String valor) {
 		for (String primitive : primitivesTypes) {
@@ -25,7 +25,7 @@ public class JavaTypes {
 	}
 
 	public static boolean isWrapper(String valor) {
-		for (String wrapper : wrappersTypes) {
+		for (String wrapper : warppersTypes) {
 			if (valor.equals(wrapper)) {
 				return true;
 			}
@@ -35,8 +35,7 @@ public class JavaTypes {
 	}
 
 	public static boolean isString(String valor) {
-
-		for (String string : stringsTypes) {
+		for (String string : stringTypes) {
 			if (valor.equals(string)) {
 				return true;
 			}
@@ -45,30 +44,37 @@ public class JavaTypes {
 	}
 
 	public static boolean Object(String valor) {
-		if (valor.equals(objectType)) {
+		if (valor.equals(object)) {
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean canInsertTypes(String dependency) {
+	public static boolean mustRemoveTypes(String dependency) {
 
 		if (JavaTypes.isPrimitive(dependency)) {
-			return false;
+			return true;
 		}
 
 		if (JavaTypes.isString(dependency)) {
-			return false;
+			return true;
 		}
 
 		if (JavaTypes.isWrapper(dependency)) {
-			return false;
+			return true;
 		}
 
 		if (JavaTypes.Object(dependency)) {
-			return false;
+			return true;
 		}
 
-		return true;
+		return false;
+	}
+
+	public static boolean ismethodOrAtribute(String dependency) {
+		if (dependency.contains(":")) {
+			return true;
+		}
+		return false;
 	}
 }

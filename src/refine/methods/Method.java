@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import refine.basic.AllEntitiesMapping;
+import refine.utils.JavaTypes;
 
 public class Method {
 
@@ -40,12 +41,19 @@ public class Method {
 
 	public void setNewMethodsDependencies(List<String> dependeciesList) {
 
+		for (String dependecy : dependeciesList) {
+			if (JavaTypes.mustRemoveTypes(dependecy))
+				return;
+		}
+
 		int depedencyID;
 		for (String name : dependeciesList) {
-			depedencyID = AllEntitiesMapping.getInstance().getByName(name);
-			methodsDependenciesID.add(depedencyID);
-			AllDependenciesMethods.getInstance().getAllDependenciesMethodID()
-					.add(depedencyID);
+			if (!JavaTypes.ismethodOrAtribute(name)) {
+				depedencyID = AllEntitiesMapping.getInstance().getByName(name);
+				methodsDependenciesID.add(depedencyID);
+				AllDependenciesMethods.getInstance()
+						.getAllDependenciesMethodID().add(depedencyID);
+			}
 
 		}
 

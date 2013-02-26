@@ -17,7 +17,6 @@ import refine.dependencies.DeclareReturnDependency;
 import refine.dependencies.Dependency;
 import refine.dependencies.SimpleNameDependency;
 import refine.dependencies.ThrowDependency;
-import refine.utils.JavaTypes;
 import refine.utils.RefineSignatures;
 
 public class AllEntitiesMapping {
@@ -72,15 +71,17 @@ public class AllEntitiesMapping {
 					String methodB = RefineSignatures.getMethodSignature(
 							dep.getClassNameB(), acDependency.getImethodB());
 
-//					System.out.println("AccessMethodDependency");
-//					System.out.println(methodA);
-//					System.out.println(classeA);
-//					System.out.println(classeB);
-//					System.out.println(methodB);
-//					System.out.println();
+					// System.out.println("AccessMethodDependency");
+					// System.out.println(methodA);
+					// System.out.println(classeA);
+					// System.out.println(classeB);
+					// System.out.println(methodB);
+					// System.out.println();
 
-					insertMapping(classeA, methodA);
-					insertMapping(classeB, methodB);
+					insertMapping(methodA);
+					insertMapping(classeA);
+					insertMapping(classeB);
+					insertMapping(methodB);
 
 				}
 
@@ -99,15 +100,17 @@ public class AllEntitiesMapping {
 							dep.getClassNameB(),
 							acFieldDependency.getiVariableBinding());
 
-//					System.out.println("AccessFieldDependency");
-//					System.out.println(methodA);
-//					System.out.println(classeA);
-//					System.out.println(classeB);
-//					System.out.println(field);
-//					System.out.println();
+					// System.out.println("AccessFieldDependency");
+					// System.out.println(methodA);
+					// System.out.println(classeA);
+					// System.out.println(classeB);
+					// System.out.println(field);
+					// System.out.println();
 
-					insertMapping(classeA, methodA);
-					insertMapping(classeB, field);
+					insertMapping(methodA);
+					insertMapping(classeA);
+					insertMapping(classeB);
+					insertMapping(field);
 
 				}
 
@@ -125,15 +128,17 @@ public class AllEntitiesMapping {
 							dep.getClassNameB(),
 							snDependency.getiVariableBinding());
 
-//					System.out.println("SimpleNameDependency");
-//					System.out.println(methodA);
-//					System.out.println(classeA);
-//					System.out.println(classeB);
-//					System.out.println(field);
-//					System.out.println();
+					// System.out.println("SimpleNameDependency");
+					// System.out.println(methodA);
+					// System.out.println(classeA);
+					// System.out.println(classeB);
+					// System.out.println(field);
+					// System.out.println();
 
-					insertMapping(classeA, methodA);
-					insertMapping(classeB, field);
+					insertMapping(methodA);
+					insertMapping(classeA);
+					insertMapping(classeB);
+					insertMapping(field);
 
 				}
 
@@ -147,14 +152,15 @@ public class AllEntitiesMapping {
 					String methodA = RefineSignatures.getMethodSignature(
 							dep.getClassNameA(), anDependency.getImethodA());
 
-					insertMapping(classeA, methodA);
+					insertMapping(methodA);
+					insertMapping(classeA);
 					insertMapping(classeB);
 
-//					System.out.println("AnnotateMethodDependency");
-//					System.out.println(methodA);
-//					System.out.println(classeA);
-//					System.out.println(classeB);
-//					System.out.println();
+					// System.out.println("AnnotateMethodDependency");
+					// System.out.println(methodA);
+					// System.out.println(classeA);
+					// System.out.println(classeB);
+					// System.out.println();
 				}
 
 				if (dep instanceof CreateMethodDependency) {
@@ -166,13 +172,14 @@ public class AllEntitiesMapping {
 					String methodA = RefineSignatures.getMethodSignature(
 							dep.getClassNameA(), cmDependency.getImethodA());
 
-//					System.out.println("CreateMethodDependency");
-//					System.out.println(classeA);
-//					System.out.println(methodA);
-//					System.out.println(classeB);
-//					System.out.println();
+					// System.out.println("CreateMethodDependency");
+					// System.out.println(classeA);
+					// System.out.println(methodA);
+					// System.out.println(classeB);
+					// System.out.println();
 
-					insertMapping(classeA, methodA);
+					insertMapping(classeA);
+					insertMapping(methodA);
 					insertMapping(classeB);
 
 				}
@@ -187,13 +194,14 @@ public class AllEntitiesMapping {
 					String methodA = RefineSignatures.getMethodSignature(
 							dep.getClassNameA(), dpDependency.getImethodA());
 
-//					System.out.println("DeclareParameterDependency");
-//					System.out.println(methodA);
-//					System.out.println(classeA);
-//					System.out.println(classeB);
-//					System.out.println();
+					// System.out.println("DeclareParameterDependency");
+					// System.out.println(methodA);
+					// System.out.println(classeA);
+					// System.out.println(classeB);
+					// System.out.println();
 
-					insertMapping(classeA, methodA);
+					insertMapping(methodA);
+					insertMapping(classeA);
 					insertMapping(classeB);
 
 				}
@@ -208,13 +216,14 @@ public class AllEntitiesMapping {
 					String methodA = RefineSignatures.getMethodSignature(
 							dep.getClassNameA(), drDependency.getImethodA());
 
-//					System.out.println("DeclareReturnDependency");
-//					System.out.println(methodA);
-//					System.out.println(classeA);
-//					System.out.println(classeB);
-//					System.out.println();
+					// System.out.println("DeclareReturnDependency");
+					// System.out.println(methodA);
+					// System.out.println(classeA);
+					// System.out.println(classeB);
+					// System.out.println();
 
-					insertMapping(classeA, methodA);
+					insertMapping(methodA);
+					insertMapping(classeA);
 					insertMapping(classeB);
 
 				}
@@ -229,13 +238,14 @@ public class AllEntitiesMapping {
 					String methodA = RefineSignatures.getMethodSignature(
 							dep.getClassNameA(), dlvDependency.getImethodA());
 
-//					System.out.println("DeclareLocalVariableDependency");
-//					System.out.println(methodA);
-//					System.out.println(classeA);
-//					System.out.println(classeB);
-//					System.out.println();
+					// System.out.println("DeclareLocalVariableDependency");
+					// System.out.println(methodA);
+					// System.out.println(classeA);
+					// System.out.println(classeB);
+					// System.out.println();
 
-					insertMapping(classeA, methodA);
+					insertMapping(methodA);
+					insertMapping(classeA);
 					insertMapping(classeB);
 
 				}
@@ -249,13 +259,14 @@ public class AllEntitiesMapping {
 					String methodA = RefineSignatures.getMethodSignature(
 							dep.getClassNameA(), throwDependency.getImethodA());
 
-//					System.out.println("ThrowDependency");
-//					System.out.println(methodA);
-//					System.out.println(classeA);
-//					System.out.println(classeB);
-//					System.out.println();
+					// System.out.println("ThrowDependency");
+					// System.out.println(methodA);
+					// System.out.println(classeA);
+					// System.out.println(classeB);
+					// System.out.println();
 
-					insertMapping(classeA, methodA);
+					insertMapping(methodA);
+					insertMapping(classeA);
 					insertMapping(classeB);
 
 				}
@@ -287,28 +298,11 @@ public class AllEntitiesMapping {
 
 	private void insertMapping(String dependency) {
 		// TODO Auto-generated method stub
-		if (!JavaTypes.canInsertTypes(dependency)) {
-			return;
-		}
-		
 		if (!allDependeciesMapByName.containsKey(dependency)) {
-			allDependeciesMapByName.put(dependency,
-					allDependeciesMapByName.size());
+			allDependeciesMapByName.put(dependency, allDependeciesMapByName.size());
 			allDependeciesMapByID.put(allDependeciesMapByName.get(dependency),
 					dependency);
 		}
-
-	}
-
-	private void insertMapping(String classDependency,
-			String secundaryDependency) {
-		// TODO Auto-generated method stub
-		if (!JavaTypes.canInsertTypes(classDependency)) {
-			return;
-		}
-		
-		insertMapping(classDependency);
-		insertMapping(secundaryDependency);
 
 	}
 
@@ -332,7 +326,5 @@ public class AllEntitiesMapping {
 		throw new ExceptionInInitializerError(
 				"AllDependeciesMapping not created yet.");
 	}
-
-
 
 }
