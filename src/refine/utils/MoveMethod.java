@@ -41,7 +41,8 @@ public class MoveMethod {
 		System.out.println("Target size " + targets.length);
 		for (int i = 0; i < targets.length; i++) {
 			IVariableBinding candidate = targets[i];
-			System.out.println("candidato " + candidate.getDeclaringClass().getQualifiedName());
+			System.out.println("candidato "
+					+ candidate.getDeclaringClass().getQualifiedName());
 			System.out
 					.println("name " + candidate.getType().getQualifiedName());
 			if (candidate.getName().equals("b")) {
@@ -97,30 +98,62 @@ public class MoveMethod {
 
 		List<String> candidatesList = new ArrayList<String>();
 
+		try {
+
 			MoveInstanceMethodProcessor processor = new MoveInstanceMethodProcessor(
 					method,
 					JavaPreferencesSettings.getCodeGenerationSettings(method
 							.getJavaProject()));
+
 			IProgressMonitor progressMonitor = new NullProgressMonitor();
 
-			try {
-				processor.checkInitialConditions(progressMonitor);
-			} catch (OperationCanceledException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			processor.checkInitialConditions(progressMonitor);
 
 			IVariableBinding target = null;
 
 			IVariableBinding[] targets = processor.getPossibleTargets();
 
 			for (int i = 0; i < targets.length; i++) {
+				System.out.println("i" + i);
 				IVariableBinding candidate = targets[i];
-				candidatesList.add(candidate.getType().getQualifiedName());
+
+				processor = new MoveInstanceMethodProcessor(method,
+						JavaPreferencesSettings
+								.getCodeGenerationSettings(method
+										.getJavaProject()));
+
+				processor.checkInitialConditions(progressMonitor);
+
+				processor.setTarget(candidate);
+				processor.setInlineDelegator(true);
+				processor.setRemoveDelegator(true);
+				processor.setDeprecateDelegates(false);
+				processor.setUseGetters(true);
+
+				Refactoring ref = new MoveRefactoring(processor);
+
+				ref.checkInitialConditions(new NullProgressMonitor());
+
+				RefactoringStatus status = ref
+						.checkAllConditions(new NullProgressMonitor());
+
+				if (status.getSeverity() > RefactoringStatus.WARNING) {
+					System.out.println("Falha n " + status.getSeverity());
+					System.out.println("!ok :-( " + method.getElementName()
+							+ " " + candidate.getType().getQualifiedName());
+				} else {
+					candidatesList.add(candidate.getType().getQualifiedName());
+				}
+
 			}
+		} catch (OperationCanceledException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return candidatesList;
 
 	}

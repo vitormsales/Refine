@@ -23,6 +23,7 @@ import refine.approach.CalculateMediaApproach;
 import refine.approach.CalculateMediaClassApproach;
 import refine.ast.DeepDependencyVisitor;
 import refine.basic.AllEntitiesMapping;
+import refine.basic.CoefficientsResolution.CoefficientStrategy;
 import refine.classes.AllDependenciesClasses;
 import refine.classes.StatisticsMethod2MethodsOfClass;
 import refine.methods.AllMethods;
@@ -102,8 +103,8 @@ public class RefineSimilarityHandler extends AbstractHandler {
 				// tornando visivel para o coletor de lixo
 				allDeepDependency = null;
 
-//				allMethods.excludeConstructors();
-//				allMethods.excludeDependeciesLessThan(5);
+				// allMethods.excludeConstructors();
+				// allMethods.excludeDependeciesLessThan(5);
 
 				// ########## Method2Method begin
 
@@ -121,26 +122,29 @@ public class RefineSimilarityHandler extends AbstractHandler {
 				allMethods = null;
 
 				System.out.println("iniciando calculateForAllStrategies");
-				mediaApproach.calculateForAllStrategies();
+				mediaApproach.calculate(CoefficientStrategy.Jaccard);
 				System.out.println("Terminou calculateForAllStrategies");
 				// ########## Method2Method end
 
 				// ########## Method2UnionMethod begin
-//				AllDependenciesClasses allClasses = new AllDependenciesClasses(
-//						allMethods);
-//
-//				System.out.println("StatisticsMethod2MethodsOfClass\n");
-//				StatisticsMethod2MethodsOfClass m2mc = new StatisticsMethod2MethodsOfClass(
-//						allMethods.getAllMethodsList(),
-//						allClasses.getAllClassList());
-//				System.out.println("StatisticsMethod2MethodsOfClass FIM\n");
-//
-//				System.out.println("CalculateMediaClassApproach\n");
-//				CalculateMediaClassApproach mediaClassApproach = new CalculateMediaClassApproach(
-//						m2mc.getAllParameters(), allMethods,
-//						allClasses.getAllClassList(), activeProjectName);
-//				System.out.println("CalculateMediaClassApproach FIM\n");
-//				mediaClassApproach.calculateForAllStrategies();
+				// AllDependenciesClasses allClasses = new
+				// AllDependenciesClasses(
+				// allMethods);
+				//
+				// System.out.println("StatisticsMethod2MethodsOfClass\n");
+				// StatisticsMethod2MethodsOfClass m2mc = new
+				// StatisticsMethod2MethodsOfClass(
+				// allMethods.getAllMethodsList(),
+				// allClasses.getAllClassList());
+				// System.out.println("StatisticsMethod2MethodsOfClass FIM\n");
+				//
+				// System.out.println("CalculateMediaClassApproach\n");
+				// CalculateMediaClassApproach mediaClassApproach = new
+				// CalculateMediaClassApproach(
+				// m2mc.getAllParameters(), allMethods,
+				// allClasses.getAllClassList(), activeProjectName);
+				// System.out.println("CalculateMediaClassApproach FIM\n");
+				// mediaClassApproach.calculateForAllStrategies();
 				// ########## Method2UnionMethod end
 				System.out.println("Fim");
 			}

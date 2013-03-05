@@ -107,16 +107,23 @@ public class CalculateMediaApproach {
 
 		for (int i = 0; i < allMethods.getAllMethodsList().size(); i++) {
 
+			Method sourceMethod = allMethods.getAllMethodsList().get(i);
+
 			// #########begin conta somente aqueles que algum move é possivel
-			int source = allMethods.getAllMethodsList().get(i).getNameID();
+
+			int source = sourceMethod.getNameID();
 			if (!allMethods.getMoveIspossible().contains(source)) {
 				continue;
+
 			}
+			// #### tira metodos pequenos
+			if (sourceMethod.getMethodsDependencies().size() < 4) {
+				continue;
+			}
+			// #### end
 			// ########end;
 
 			allClassSimilarity.clear();
-
-			Method sourceMethod = allMethods.getAllMethodsList().get(i);
 
 			System.out.println("Calculando o metodo " + sourceMethod);
 
@@ -213,11 +220,6 @@ public class CalculateMediaApproach {
 			List<ClassAtributes> allClassSimilarity, int posMax) {
 		// TODO Auto-generated method stub
 
-//		final int NUMDEPENDENCIAMIN = 5;
-//		if (sourceMethod.getMethodsDependencies().size() < NUMDEPENDENCIAMIN) {
-//			return false;
-//		}
-		
 		ClassAtributes classOriginal = new ClassAtributes(
 				sourceMethod.getSourceClassID());
 
