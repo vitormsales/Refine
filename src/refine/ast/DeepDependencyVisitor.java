@@ -454,13 +454,25 @@ public class DeepDependencyVisitor extends ASTVisitor {
 				if (javaElementB instanceof IMethod) {
 					iMethodB = (IMethod) javaElementB;
 				}
-
-				this.dependencies.add(new AccessMethodDependency(
-						this.className, this.getTargetClassName(node
-								.getExpression().resolveTypeBinding()), md
-								.getName().getIdentifier(), node.getName()
-								.getIdentifier(), iMethodA, iMethodB,
-						isStatic != 0));
+				
+				System.out.println(iMethodA.getElementName());
+				System.out.println(iMethodB.getElementName());
+					System.out.println(node.resolveMethodBinding().getDeclaringClass().getQualifiedName());
+			
+				
+					this.dependencies.add(new AccessMethodDependency(
+					this.className, node.resolveMethodBinding().getDeclaringClass().getQualifiedName(), md
+							.getName().getIdentifier(), node.getName()
+							.getIdentifier(), iMethodA, iMethodB,
+					isStatic != 0));
+					
+//Forma original					
+//				this.dependencies.add(new AccessMethodDependency(
+//						this.className, this.getTargetClassName(node
+//								.getExpression().resolveTypeBinding()), md
+//								.getName().getIdentifier(), node.getName()
+//								.getIdentifier(), iMethodA, iMethodB,
+//						isStatic != 0));
 
 				// System.out.println("aki ");
 				// System.out.println(md.getName().getIdentifier());

@@ -143,6 +143,7 @@ public class AllMethods {
 
 					String sourceClass = dep.getClassNameA();
 					String dependecyClass = dep.getClassNameB();
+					
 					// String field = dep.getClassNameB() + "."
 					// + ((SimpleNameDependency) dep).getVariableName();
 

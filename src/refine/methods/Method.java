@@ -1,5 +1,6 @@
 package refine.methods;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,11 +13,15 @@ public class Method {
 	private int sourceClassID;
 	private int NameID;
 	private Set<Integer> methodsDependenciesID;
+	
+	//Atributo para feature envy
+	private List<Integer> methodsAcessDependenciesID;
 
 	public Method(int methodId, int sourceClassID) {
 		this.NameID = methodId;
 		this.sourceClassID = sourceClassID;
 		this.methodsDependenciesID = new HashSet<Integer>();
+		this.methodsAcessDependenciesID = new ArrayList<Integer>();
 	}
 
 	public int getSourceClassID() {
@@ -39,6 +44,10 @@ public class Method {
 		return methodsDependenciesID;
 	}
 
+	public List<Integer> getMethodsAcessDependenciesID() {
+		return methodsAcessDependenciesID;
+	}
+
 	public void setNewMethodsDependencies(List<String> dependeciesList) {
 
 		for (String dependecy : dependeciesList) {
@@ -47,6 +56,18 @@ public class Method {
 		}
 
 		int depedencyID;
+
+		// Cria conjunto para deteccao de feature Envy
+		if (JavaTypes.isInternalClass(dependeciesList)) {
+			for (String dependency : dependeciesList) {
+				if (JavaTypes.ismethodOrAtribute(dependency)) {
+					depedencyID = AllEntitiesMapping.getInstance().getByName(
+							dependency);
+					methodsAcessDependenciesID.add(depedencyID);
+				}
+			}
+		}
+
 		for (String name : dependeciesList) {
 			if (!JavaTypes.ismethodOrAtribute(name)) {
 				depedencyID = AllEntitiesMapping.getInstance().getByName(name);

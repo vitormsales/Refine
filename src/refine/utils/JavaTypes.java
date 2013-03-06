@@ -1,10 +1,12 @@
 package refine.utils;
 
+import java.util.List;
+
 public class JavaTypes {
 
 	private final static String[] anottationTypes = { "java.lang.Override",
 			"java.lang.SuppressWarnings" };
-	
+
 	private final static String[] primitivesTypes = { "boolean", "byte",
 			"char", "int", "long", "float", "double" };
 
@@ -105,6 +107,18 @@ public class JavaTypes {
 		if (dependency.contains(":")) {
 			return true;
 		}
+		return false;
+	}
+
+	public static boolean isInternalClass(List<String> dependencyList) {
+		List<String> classList = InternalClass.getInstance().getClassList();
+
+		for (String dependency : dependencyList) {
+			if (classList.contains(dependency)) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 }

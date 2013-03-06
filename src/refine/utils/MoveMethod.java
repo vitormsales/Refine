@@ -109,18 +109,18 @@ public class MoveMethod {
 
 			processor.checkInitialConditions(progressMonitor);
 
-			IVariableBinding target = null;
-
 			IVariableBinding[] targets = processor.getPossibleTargets();
 
 			for (int i = 0; i < targets.length; i++) {
-				System.out.println("i" + i);
+
 				IVariableBinding candidate = targets[i];
 
 				processor = new MoveInstanceMethodProcessor(method,
 						JavaPreferencesSettings
 								.getCodeGenerationSettings(method
 										.getJavaProject()));
+
+				progressMonitor = new NullProgressMonitor();
 
 				processor.checkInitialConditions(progressMonitor);
 
@@ -131,26 +131,21 @@ public class MoveMethod {
 				processor.setUseGetters(true);
 
 				Refactoring ref = new MoveRefactoring(processor);
+				RefactoringStatus status = null;
 
-				ref.checkInitialConditions(new NullProgressMonitor());
+				status = ref.checkAllConditions(new NullProgressMonitor());
 
-				RefactoringStatus status = ref
-						.checkAllConditions(new NullProgressMonitor());
-
-				if (status.getSeverity() > RefactoringStatus.WARNING) {
-					System.out.println("Falha n " + status.getSeverity());
-					System.out.println("!ok :-( " + method.getElementName()
-							+ " " + candidate.getType().getQualifiedName());
-				} else {
+				if (status != null
+						&& status.getSeverity() < RefactoringStatus.ERROR) {
 					candidatesList.add(candidate.getType().getQualifiedName());
 				}
 
 			}
-		} catch (OperationCanceledException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
+			System.out.println("NullPointerException");
+		} catch (Exception e) {
+			// TODO: handle exception
 			e.printStackTrace();
 		}
 

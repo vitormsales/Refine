@@ -16,7 +16,7 @@ public class RefineSignatures {
 		
 		String fieldName = iVariableBinding.getName();
 		String fieldType = iVariableBinding.getType().getQualifiedName();
-		String signature = classNameA + "." + fieldName + ":" + fieldType;
+		String signature = classNameA + ";;" + fieldName + ":" + fieldType;
 		return signature;
 	}
 
