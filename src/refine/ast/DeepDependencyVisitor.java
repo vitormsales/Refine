@@ -454,25 +454,21 @@ public class DeepDependencyVisitor extends ASTVisitor {
 				if (javaElementB instanceof IMethod) {
 					iMethodB = (IMethod) javaElementB;
 				}
-				
-				System.out.println(iMethodA.getElementName());
-				System.out.println(iMethodB.getElementName());
-					System.out.println(node.resolveMethodBinding().getDeclaringClass().getQualifiedName());
-			
-				
-					this.dependencies.add(new AccessMethodDependency(
-					this.className, node.resolveMethodBinding().getDeclaringClass().getQualifiedName(), md
-							.getName().getIdentifier(), node.getName()
-							.getIdentifier(), iMethodA, iMethodB,
-					isStatic != 0));
-					
-//Forma original					
-//				this.dependencies.add(new AccessMethodDependency(
-//						this.className, this.getTargetClassName(node
-//								.getExpression().resolveTypeBinding()), md
-//								.getName().getIdentifier(), node.getName()
-//								.getIdentifier(), iMethodA, iMethodB,
-//						isStatic != 0));
+
+				this.dependencies.add(new AccessMethodDependency(
+						this.className, node.resolveMethodBinding()
+								.getDeclaringClass().getQualifiedName(), md
+								.getName().getIdentifier(), node.getName()
+								.getIdentifier(), iMethodA, iMethodB,
+						isStatic != 0));
+
+				// Forma original
+				// this.dependencies.add(new AccessMethodDependency(
+				// this.className, this.getTargetClassName(node
+				// .getExpression().resolveTypeBinding()), md
+				// .getName().getIdentifier(), node.getName()
+				// .getIdentifier(), iMethodA, iMethodB,
+				// isStatic != 0));
 
 				// System.out.println("aki ");
 				// System.out.println(md.getName().getIdentifier());
@@ -545,11 +541,13 @@ public class DeepDependencyVisitor extends ASTVisitor {
 		 * visit(SimpleName node)
 		 */
 
+		// System.out.println(node);
 		// String atribute = node.toString();
-		// if (atribute.contains("this.") && atribute.indexOf("this.") == 0) {
-		// System.out.println("acesso feito com this");
+		// if (atribute.startsWith("this.")) {
+		// //System.out.println("acesso feito com this");
 		// return false;
 		// }
+
 		ASTNode relevantParent = getRelevantParent(node);
 
 		int isStatic = node.resolveFieldBinding().getModifiers()
@@ -557,20 +555,21 @@ public class DeepDependencyVisitor extends ASTVisitor {
 
 		switch (relevantParent.getNodeType()) {
 		case ASTNode.METHOD_DECLARATION:
+			if (!this.className.equals(this.getTargetClassName(node
+					.getExpression().resolveTypeBinding()))) {
+				MethodDeclaration md = (MethodDeclaration) relevantParent;
 
-			MethodDeclaration md = (MethodDeclaration) relevantParent;
+				IMethod iMethodA = getIMethod(md);
 
-			IMethod iMethodA = getIMethod(md);
+				IVariableBinding iVariableBinding = node.resolveFieldBinding();
 
-			IVariableBinding iVariableBinding = node.resolveFieldBinding();
-
-			this.dependencies.add(new AccessFieldDependency(this.className,
-					this.getTargetClassName(node.getExpression()
-							.resolveTypeBinding()), md.getName()
-							.getFullyQualifiedName(), node.getName()
-							.getFullyQualifiedName(), iMethodA,
-					iVariableBinding, isStatic != 0));
-
+				this.dependencies.add(new AccessFieldDependency(this.className,
+						this.getTargetClassName(node.getExpression()
+								.resolveTypeBinding()), md.getName()
+								.getFullyQualifiedName(), node.getName()
+								.getFullyQualifiedName(), iMethodA,
+						iVariableBinding, isStatic != 0));
+			}
 			break;
 		// case ASTNode.INITIALIZER:
 		// this.dependencies.add(new AccessFieldDependency(this.className,
@@ -587,6 +586,7 @@ public class DeepDependencyVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(QualifiedName node) {
+
 		if ((node.getParent().getNodeType() == ASTNode.METHOD_INVOCATION
 				|| node.getParent().getNodeType() == ASTNode.INFIX_EXPRESSION
 				|| node.getParent().getNodeType() == ASTNode.VARIABLE_DECLARATION_FRAGMENT || node
@@ -641,7 +641,9 @@ public class DeepDependencyVisitor extends ASTVisitor {
 		if (node.resolveBinding() != null) {
 			int isStatic = node.resolveBinding().getModifiers()
 					& Modifier.STATIC;
+
 			if (node.resolveBinding().getKind() == IBinding.VARIABLE) {
+
 				switch (relevantParent.getNodeType()) {
 				case ASTNode.METHOD_DECLARATION:
 
@@ -667,6 +669,20 @@ public class DeepDependencyVisitor extends ASTVisitor {
 
 					List<String> fieldVariableList = getFields(this);
 
+					// System.out.println(md);
+					//
+					// System.out.println("VARIAVEL OLHADA "+node.resolveBinding()
+					// .getName());
+					//
+					// System.out.println("FIELDS");
+					// for (String f : fieldVariableList) {
+					// System.out.println(f);
+					// }
+					//
+					// System.out.println("LOCAL");
+					// for (String lw : localVariableSet) {
+					// System.out.println(lw);
+					// }
 					if (!localVariableSet.contains(node.resolveBinding()
 							.getName())
 							&& fieldVariableList.contains(node.resolveBinding()

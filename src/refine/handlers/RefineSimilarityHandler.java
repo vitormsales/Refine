@@ -29,6 +29,7 @@ import refine.classes.StatisticsMethod2MethodsOfClass;
 import refine.methods.AllMethods;
 import refine.methods.Method;
 import refine.methods.StatisticsMethod2Method;
+import refine.utils.FeatureEnvy;
 import refine.utils.InternalClass;
 import dclsuite.util.DCLUtil;
 
@@ -82,9 +83,9 @@ public class RefineSimilarityHandler extends AbstractHandler {
 					if (className == null) {
 						continue;
 					}
-					
+
 					InternalClass.getInstance().putNewInternalClass(className);
-					
+
 					IFile resource = DCLUtil.getFileFromClassName(javaProject,
 							className);
 					ICompilationUnit unit = ((ICompilationUnit) JavaCore
@@ -105,16 +106,17 @@ public class RefineSimilarityHandler extends AbstractHandler {
 				AllMethods allMethods = new AllMethods(allDeepDependency);
 				System.out.println(" Terminou AllMethods");
 
-				
-				for (Method method : allMethods.getAllMethodsList()) {
-					System.out.println(method);
-					for (Integer ID : method.getMethodsAcessDependenciesID()) {
-						System.out.println(AllEntitiesMapping.getInstance().getByID(ID));
-						
-					}
-					System.out.println();
-				}
-				
+				FeatureEnvy.getInstance().detectFeatureEnvy(
+						allMethods.getAllMethodsList());
+				// for (Method method : allMethods.getAllMethodsList()) {
+				// System.out.println(method);
+				// for (Integer ID : method.getMethodsAcessDependenciesID()) {
+				// System.out.println(AllEntitiesMapping.getInstance().getByID(ID));
+				//
+				// }
+				// System.out.println();
+				// }
+
 				// tornando visivel para o coletor de lixo
 				allDeepDependency = null;
 

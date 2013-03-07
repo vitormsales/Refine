@@ -58,7 +58,6 @@ public class Method {
 		int depedencyID;
 
 		// Cria conjunto para deteccao de feature Envy
-		if (JavaTypes.isInternalClass(dependeciesList)) {
 			for (String dependency : dependeciesList) {
 				if (JavaTypes.ismethodOrAtribute(dependency)) {
 					depedencyID = AllEntitiesMapping.getInstance().getByName(
@@ -66,7 +65,6 @@ public class Method {
 					methodsAcessDependenciesID.add(depedencyID);
 				}
 			}
-		}
 
 		for (String name : dependeciesList) {
 			if (!JavaTypes.ismethodOrAtribute(name)) {

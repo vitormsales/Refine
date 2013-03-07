@@ -3,6 +3,8 @@ package refine.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import refine.basic.AllEntitiesMapping;
+
 public class InternalClass {
 
 	private static InternalClass instance;
@@ -30,5 +32,15 @@ public class InternalClass {
 
 	public List<String> getClassList() {
 		return classNames;
+	}
+
+	public boolean isInternal(Integer id) {
+		String candidate = AllEntitiesMapping.getInstance().getByID(id);
+		//System.out.println("candidato "+ candidate);
+		if (classNames.contains(candidate)) {
+			//System.out.println("contem "+ candidate);
+			return true;
+		}
+		return false;
 	}
 }
