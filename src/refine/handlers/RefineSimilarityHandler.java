@@ -29,9 +29,9 @@ import refine.classes.StatisticsMethod2MethodsOfClass;
 import refine.methods.AllMethods;
 import refine.methods.Method;
 import refine.methods.StatisticsMethod2Method;
-import refine.utils.FeatureEnvy;
-import refine.utils.InternalClass;
 import dclsuite.util.DCLUtil;
+import envy.FeatureEnvy;
+import envy.InternalClass;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -106,8 +106,8 @@ public class RefineSimilarityHandler extends AbstractHandler {
 				AllMethods allMethods = new AllMethods(allDeepDependency);
 				System.out.println(" Terminou AllMethods");
 
-				FeatureEnvy.getInstance().detectFeatureEnvy(
-						allMethods.getAllMethodsList());
+				FeatureEnvy.getInstance().sugestFeatureEnvyMoves(
+						allMethods);
 				// for (Method method : allMethods.getAllMethodsList()) {
 				// System.out.println(method);
 				// for (Integer ID : method.getMethodsAcessDependenciesID()) {

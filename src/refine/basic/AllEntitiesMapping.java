@@ -2,6 +2,7 @@ package refine.basic;
 
 import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jdt.core.JavaModelException;
@@ -17,6 +18,7 @@ import refine.dependencies.DeclareReturnDependency;
 import refine.dependencies.Dependency;
 import refine.dependencies.SimpleNameDependency;
 import refine.dependencies.ThrowDependency;
+import refine.utils.PrintOutput;
 import refine.utils.RefineSignatures;
 
 public class AllEntitiesMapping {
@@ -100,6 +102,9 @@ public class AllEntitiesMapping {
 							dep.getClassNameB(),
 							acFieldDependency.getiVariableBinding());
 
+					String fieldType = acFieldDependency.getiVariableBinding()
+							.getType().getQualifiedName();
+					
 					// System.out.println("AccessFieldDependency");
 					// System.out.println(methodA);
 					// System.out.println(classeA);
@@ -111,6 +116,7 @@ public class AllEntitiesMapping {
 					insertMapping(classeA);
 					insertMapping(classeB);
 					insertMapping(field);
+					insertMapping(fieldType);
 
 				}
 
@@ -127,6 +133,9 @@ public class AllEntitiesMapping {
 					String field = RefineSignatures.getFieldSignature(
 							dep.getClassNameB(),
 							snDependency.getiVariableBinding());
+					
+					String fieldType = snDependency.getiVariableBinding()
+							.getType().getQualifiedName();
 
 					// System.out.println("SimpleNameDependency");
 					// System.out.println(methodA);
@@ -139,6 +148,7 @@ public class AllEntitiesMapping {
 					insertMapping(classeA);
 					insertMapping(classeB);
 					insertMapping(field);
+					insertMapping(fieldType);
 
 				}
 
@@ -275,31 +285,32 @@ public class AllEntitiesMapping {
 
 		}
 
-		// // ############### Imprime todas as dependencias encontradas
-		// Iterator<Integer> it = allDependeciesMapByID.keySet().iterator();
-		// PrintOutput out = new PrintOutput();
-		// String address = "Tudo";
-		// while (it.hasNext()) {
-		// String temp = allDependeciesMapByID.get(it.next());
-		// System.out.println(temp + " " + allDependeciesMapByName.get(temp));
-		// out.write(temp + " " + allDependeciesMapByName.get(temp) + "\n",
-		// address);
-		//
-		// }
-		// out.write("total de possiveis dep " + allDependeciesMapByID.size(),
-		// address);
-		// out.finish(address);
-		// System.out.println("total de possiveis dep "
-		// + allDependeciesMapByID.size());
-		// System.out.println("\nallDependecies FINISH\n\n");
-		// // ###############
+		// ############### Imprime todas as dependencias encontradas
+		Iterator<Integer> it = allDependeciesMapByID.keySet().iterator();
+		PrintOutput out = new PrintOutput();
+		String address = "Tudo";
+		while (it.hasNext()) {
+			String temp = allDependeciesMapByID.get(it.next());
+//			System.out.println(temp + " " + allDependeciesMapByName.get(temp));
+			out.write(temp + " " + allDependeciesMapByName.get(temp) + "\n",
+					address);
+
+		}
+		out.write("total de possiveis dep " + allDependeciesMapByID.size(),
+				address);
+		out.finish(address);
+//		System.out.println("total de possiveis dep "
+//				+ allDependeciesMapByID.size());
+//		System.out.println("\nallDependecies FINISH\n\n");
+		// ###############
 
 	}
 
 	private void insertMapping(String dependency) {
 		// TODO Auto-generated method stub
 		if (!allDependeciesMapByName.containsKey(dependency)) {
-			allDependeciesMapByName.put(dependency, allDependeciesMapByName.size());
+			allDependeciesMapByName.put(dependency,
+					allDependeciesMapByName.size());
 			allDependeciesMapByID.put(allDependeciesMapByName.get(dependency),
 					dependency);
 		}

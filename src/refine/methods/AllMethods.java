@@ -320,22 +320,22 @@ public class AllMethods {
 
 		// // #............ Imprime dependencias
 
-		Iterator<Method> it = allMethodsList.iterator();
-		while (it.hasNext()) {
-			Method m = it.next();
-
-			PrintOutput.write(
-					AllEntitiesMapping.getInstance().getByID(
-							m.getNameID()) + "\n", "conjuntos");
-
-			for (Integer chaves : m.getMethodsDependencies()) {
-				PrintOutput
-						.write(AllEntitiesMapping.getInstance().getByID(chaves)
-								+ "\n", "conjuntos");
-			}
-
-			PrintOutput.write("\n \n", "conjuntos");
-		}
+//		Iterator<Method> it = allMethodsList.iterator();
+//		while (it.hasNext()) {
+//			Method m = it.next();
+//
+//			PrintOutput.write(
+//					AllEntitiesMapping.getInstance().getByID(
+//							m.getNameID()) + "\n", "conjuntos");
+//
+//			for (Integer chaves : m.getMethodsDependencies()) {
+//				PrintOutput
+//						.write(AllEntitiesMapping.getInstance().getByID(chaves)
+//								+ "\n", "conjuntos");
+//			}
+//
+//			PrintOutput.write("\n \n", "conjuntos");
+//		}
 		// //#............
 
 	}
