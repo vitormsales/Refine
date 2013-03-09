@@ -15,13 +15,13 @@ public class Method {
 	private Set<Integer> methodsDependenciesID;
 	
 	//Atributo para feature envy
-	private Set<Integer> methodsAcessDependenciesID;
+	private List<Integer> methodsAcessDependenciesID;
 
 	public Method(int methodId, int sourceClassID) {
 		this.NameID = methodId;
 		this.sourceClassID = sourceClassID;
 		this.methodsDependenciesID = new HashSet<Integer>();
-		this.methodsAcessDependenciesID = new HashSet<Integer>();
+		this.methodsAcessDependenciesID = new ArrayList<Integer>();
 	}
 
 	public int getSourceClassID() {
@@ -44,7 +44,7 @@ public class Method {
 		return methodsDependenciesID;
 	}
 
-	public Set<Integer> getMethodsAcessDependenciesID() {
+	public List<Integer> getMethodsAcessDependenciesID() {
 		return methodsAcessDependenciesID;
 	}
 
