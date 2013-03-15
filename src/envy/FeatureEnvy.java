@@ -17,7 +17,11 @@ import refine.utils.SorMapByValues;
 public class FeatureEnvy {
 
 	private static FeatureEnvy instance;
+
+	// Id do método de feature envy e a lista de candidatos
 	private Map<Integer, List<Integer>> featuryEnvyMethodMap;
+
+	// Depedencia e a frequencia de ocorrencia
 	private Map<Integer, Integer> frequency;
 	private boolean hasEnvyClass;
 
@@ -228,4 +232,9 @@ public class FeatureEnvy {
 
 		return possibleCandidates;
 	}
+
+	public Map<Integer, List<Integer>> getFeaturyEnvyMethodMap() {
+		return featuryEnvyMethodMap;
+	}
+
 }

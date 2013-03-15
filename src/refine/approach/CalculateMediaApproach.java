@@ -59,15 +59,17 @@ public class CalculateMediaApproach {
 	private String blindAdress;
 	private String sugestionAdress;
 	private String indicationAdress;
+	private int numberOfClass;
 
 	private boolean needCalculateAll;
 
 	public CalculateMediaApproach(
 			Map<Pair<Method, Method>, Parameters> allParameters,
-			AllMethods allMethods, String activeProjectName) {
+			AllMethods allMethods, String activeProjectName, int numberOfClass) {
 		// TODO Auto-generated constructor stub
 		this.allParameters = allParameters;
 		this.allMethods = allMethods;
+		this.numberOfClass = numberOfClass;
 
 		// ###### variaveis para escrita
 		this.activeProjectName = activeProjectName;
@@ -246,17 +248,17 @@ public class CalculateMediaApproach {
 				.getpossibleRefactoring(allMethods.getIMethod(sourceMethod));
 
 		if (possiblesCandidateList.size() > 0) {
-
+			// System.out.println("METODO " + sourceMethod);
 			for (int idCandidates : CandidateClassID) {
-
+				// System.out.println("posso mover para " + idCandidates
+				// + " idCandidates");
 				for (String possibleCandidates : possiblesCandidateList) {
-
-					// System.out.println();
-					// System.out.println(possibleCandidates);
-					// System.out.println();
 
 					Integer valor = AllEntitiesMapping.getInstance().getByName(
 							possibleCandidates);
+
+					// System.out.println("CANDIDATO atual" + possibleCandidates
+					// + "id " + valor);
 
 					int classPossibleID;
 
@@ -266,15 +268,25 @@ public class CalculateMediaApproach {
 						classPossibleID = treatyClassNameID(possibleCandidates);
 					}
 
+					// System.out.println("CANDIDATO valor tratado " +
+					// possibleCandidates
+					// + "id " + valor);
+
 					if (idCandidates == classPossibleID) {
+
 						PrintOutput.write(" Mover " + sourceMethod
 								+ " para classe " + possibleCandidates + "\n",
 								sugestionAdress);
+
+						// System.out.println("SUGESTAO   Mover " + sourceMethod
+						// + " para classe " + possibleCandidates + "\n");
 
 						return true;
 					}
 				}
 			}
+
+			System.out.println();
 
 		}
 		return false;
@@ -284,12 +296,20 @@ public class CalculateMediaApproach {
 		// TODO Auto-generated method stub
 
 		int indexBegin = possibleCandidates.indexOf('<');
+
 		if (indexBegin > 0) {
 			String treatyName = possibleCandidates.substring(0, indexBegin);
 			return AllEntitiesMapping.getInstance().getByName(treatyName);
-		} else {
-			System.out.println(possibleCandidates + " É classe Interna");
+
 		}
+
+		indexBegin = possibleCandidates.indexOf('[');
+		if (indexBegin > 0) {
+			String treatyName = possibleCandidates.substring(0, indexBegin);
+			return AllEntitiesMapping.getInstance().getByName(treatyName);
+
+		}
+
 		return -1;
 	}
 
@@ -406,9 +426,8 @@ public class CalculateMediaApproach {
 
 		int indexOf = allClassSimilarity.indexOf(classOriginal);
 
-		final int ONLYONEMETHODINDEX = 4;
 		// considera as três primeirsas posições no ranking
-		final int POSICAOMAXIMA = 2;
+		final int POSICAOMAXIMA = (int)(numberOfClass*0.03);
 
 		if (indexOf > POSICAOMAXIMA)
 			contador[indexERRADO]++;

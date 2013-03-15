@@ -456,11 +456,19 @@ public class DeepDependencyVisitor extends ASTVisitor {
 				}
 
 				this.dependencies.add(new AccessMethodDependency(
-						this.className, node.resolveMethodBinding()
-								.getDeclaringClass().getQualifiedName(), md
+						this.className, this.getTargetClassName(node
+								.getExpression().resolveTypeBinding()), md
 								.getName().getIdentifier(), node.getName()
 								.getIdentifier(), iMethodA, iMethodB,
 						isStatic != 0));
+				
+				// Forma 2
+				// this.dependencies.add(new AccessMethodDependency(
+				// this.className, node.resolveMethodBinding()
+				// .getDeclaringClass().getQualifiedName(), md
+				// .getName().getIdentifier(), node.getName()
+				// .getIdentifier(), iMethodA, iMethodB,
+				// isStatic != 0));
 
 				// Forma original
 				// this.dependencies.add(new AccessMethodDependency(

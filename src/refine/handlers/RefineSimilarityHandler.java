@@ -64,6 +64,7 @@ public class RefineSimilarityHandler extends AbstractHandler {
 					.getActiveEditor();
 
 			String activeProjectName;
+			int numberOfClass=0;
 
 			if (editorPart != null) {
 
@@ -95,6 +96,7 @@ public class RefineSimilarityHandler extends AbstractHandler {
 					DeepDependencyVisitor deepDependency = new DeepDependencyVisitor(
 							unit);
 					this.allDeepDependency.add(deepDependency);
+					numberOfClass++;
 				}
 
 				System.out.println(" inciando AllEntitiesMapping");
@@ -106,8 +108,7 @@ public class RefineSimilarityHandler extends AbstractHandler {
 				AllMethods allMethods = new AllMethods(allDeepDependency);
 				System.out.println(" Terminou AllMethods");
 
-				FeatureEnvy.getInstance().sugestFeatureEnvyMoves(
-						allMethods);
+				FeatureEnvy.getInstance().sugestFeatureEnvyMoves(allMethods);
 				// for (Method method : allMethods.getAllMethodsList()) {
 				// System.out.println(method);
 				// for (Integer ID : method.getMethodsAcessDependenciesID()) {
@@ -132,7 +133,7 @@ public class RefineSimilarityHandler extends AbstractHandler {
 
 				System.out.println("iniciando CalculateMediaApproach");
 				CalculateMediaApproach mediaApproach = new CalculateMediaApproach(
-						m2m.getAllParameters(), allMethods, activeProjectName);
+						m2m.getAllParameters(), allMethods, activeProjectName, numberOfClass);
 				System.out.println("Terminou CalculateMediaApproach");
 
 				m2m = null;
